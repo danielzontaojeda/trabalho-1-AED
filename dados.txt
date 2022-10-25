@@ -1,0 +1,20 @@
+SD;1;X-tudo; hamburger, ovo, pao, bacon, alface, tomate;D;12,90;17,90;21,90
+SD;2;X-salada; ovo, pao, queijo, alface, tomate;D;9,90;12,90;17,90
+SD;3;X-duplo;2 hamburgueres, ovo, pao, bacon, queijo, alface, tomate;D;15,90;20,90;25,90
+SD;4;X-light; pao, queijo, alface, tomate;D;15,90;20,90;25,90
+SD;5;X-vegano; pao, proteina de soja, queijo vegano, alface, tomate;I;20,90;23,90;27,90
+BB;1;coca-cola;D;3,00;5,00;7,00
+BB;2;suco de laranja;D;5,00;7,00;9,00
+BB;3;guarana;D;3,00;5,00;7,00
+EX;1;maionese;D;2,00
+EX;2;cebola;D;3,00
+EX;3;molho barbecue;D;3,00
+EX;4;batata frita;D;5,00
+SM;1;sorvete;D;10,00
+SM;2;doce de leite;D;5,00
+SM;3;musse de chocolate;D;7,00
+PD;1;11111111111;(SD,1,2,M);(SD,2,1,P);(BB,2,3,M);(EX,3,4);(SM,2,2)
+PD;2;11111111111;(SD,3,1,G);(BB,1,1,G);(EX,1,1);(SM,1,1)
+PD;3;11111111111;(SD,2,3,P);(SD,4,1,M);(BB,1,1,M);(BB,2,1,P)
+PD;4;22222222222;(SD,4,3,M);(BB,1,2,P);(BB,2,1,G);(SM,3,1)
+PD;5;33333333333;(BB,1,2,M);(EX,4,2)
