@@ -5,7 +5,7 @@
 
 #include "input_file.h"
 
-#define SIZE_LINE sizeof(char)*200
+#define SIZE_LINE sizeof(char)*500
 
 LinkedList* read_file(char* filename){
 	FILE* file = fopen(filename, "r");
@@ -19,7 +19,9 @@ LinkedList* read_file(char* filename){
 		line = malloc(SIZE_LINE);
 	}
 	// TODO: remove
+	fclose(file);
 	printf("DEBUG:\n");
 	ll_print(commands_from_file);
+	printf("size: %d\n", ll_length(commands_from_file));
 	return commands_from_file;
 }

@@ -48,6 +48,8 @@ void process_choice(int choice){
 	case load_file:
 		;
 		LinkedList* commands = load_from_file("dados.txt");
+		LinkedList* list_product = create_product_from_file(commands);
+		ll_delete(commands);
 		break;
 	}
 }

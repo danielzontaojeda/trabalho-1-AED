@@ -7,12 +7,28 @@ int ll_is_empty(LinkedList* l){
 	return l == NULL;
 }
 
+// LinkedList* ll_insert(LinkedList* l, void* info){
+// 	LinkedList* no = malloc(sizeof(LinkedList));
+// 	no->info = info;
+// 	if(ll_is_empty(l)) no->prox = NULL;
+// 	else no->prox = l;	
+// 	return no;
+// }
+
 LinkedList* ll_insert(LinkedList* l, void* info){
-	LinkedList* no = malloc(sizeof(LinkedList));
-	no->info = info;
-	if(ll_is_empty(l)) no->prox = NULL;
-	else no->prox = l;	
-	return no;
+	if(l == NULL){
+		LinkedList* node = malloc(sizeof(LinkedList));
+		node->info = info;
+		node->prox = NULL;
+		return node;
+	} 
+	l->prox = ll_insert(l->prox, info);
+}
+
+int ll_length(LinkedList* l){
+	if(l == NULL) return 0;
+	if(l->prox == NULL) return 1;
+	return ll_length(l->prox) + 1;
 }
 
 
@@ -20,6 +36,7 @@ void ll_print(LinkedList* l){
 	if(ll_is_empty(l)) return;
 	if(ll_is_empty(l->prox)) {
 		printf("%s",((TYPE_VAR)l->info));
+		printf("\n");
 		return;
 	}
 	printf("%s",((TYPE_VAR)l->info));

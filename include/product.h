@@ -1,8 +1,14 @@
 #ifndef __PRODUCT_H
 #define __PRODUCT_H
 
+#include "linked_list.h"
+
+// tamanho maximo do campo name
 #define SIZE_NAME sizeof(char)*50
+// tamanho maximo do campo description
 #define SIZE_DESCRIPTION sizeof(char)*200
+// tamanho maximo que uma linha de comandos do arquivo texto
+#define SIZE_LINE (int)(SIZE_NAME + SIZE_DESCRIPTION + 100)
 
 // significado das escolhas recebidas
 enum choice_enum {create = 1, print};
@@ -16,8 +22,6 @@ typedef struct product{
 	int is_available;					// 1 = disponivel, 0 = nao disponivel
 	double price[2];					// preco[0] = pequeno, preco[1] = medio, preco[2] = grande
 										// preco de produtos sem tamanho vao em preco[0]
-	int next;							// endereco no arquivo do proximo elemento da lista
-										// -1 caso nao exista proximo
 } Product;
 
 // Imprime informacoes do produto na tela
@@ -41,5 +45,20 @@ Product* get_product_keyboard(const char* type);
 // Pós-condições: nenhum
 void process_submenu_choice(int choice, char* type);
 
-Product* create_product(char* type, char* name, char* description, int is_available, double* price);
+// Cria entidade produto
+// Entrada: tipo do produto e seus valores
+// Retorno: entidade produto
+// Pré-condições: tipo do produto valido
+// Pós-condições: produto retornado
+Product* create_product(const char* type, int id, char* name,
+	char* description, int is_available, double* price);
+
+
+// Cria lista encadeada com produtos utilizando comandos de list_commands
+// Entrada: lista encadeada contendo os comandos do arquivo de entrada
+// Retorno: lista encadeada contendo produtos
+// Pré-condições: lista de comandos nao nula com formato valido
+// Pós-condições: lista encadeada contendo produtos retornada
+LinkedList* create_product_from_file(LinkedList* list_commands);
+
 #endif

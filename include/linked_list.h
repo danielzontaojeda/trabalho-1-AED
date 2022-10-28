@@ -44,4 +44,6 @@ void ll_print(LinkedList* l);
 // Pós-condições: elementos da lista desalocados e desencadeados
 void ll_delete(LinkedList* l);
 
+int ll_length(LinkedList* l);
+
 #endif
