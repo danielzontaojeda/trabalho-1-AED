@@ -7,7 +7,7 @@
 #include "util.h"
 
 static int get_id(){
-	// TODO: validade id
+	// TODO: validar id
 	int id = 0;
 	printf("Digite o id do produto.\n");
 	scanf("%d%*c",&id);
@@ -40,9 +40,9 @@ static int get_availability(){
 	return is_available;
 }
 
-static double* get_price_from_str(const char* type, char* price_str){
+double* get_price_from_str(const char* type, char* price_str){
 	char price_split[2][10];
-	double* price = malloc(sizeof(double)*2);
+	double* price = calloc(3,sizeof(double));
 	if(!strcmp(type, "SD") || !strcmp(type, "BB")){
 		sscanf(price_str, "%[^;];%[^;];%[^\n]%*c", price_split[0], price_split[1], price_split[2]);
 		for(int i=0;i<3;i++){
@@ -102,7 +102,6 @@ Product* get_product_keyboard(const char* type){
 	free(name);
 	free(description); 
 	free(price);
-	print_product(product);
 	return product;
 }
 
@@ -110,30 +109,31 @@ Product* create_product(const char* type, int id, char* name, char* description,
 						int is_available, double* price){
 	assert(!(strcmp(type, "SD") && strcmp(type, "BB") &&
 		strcmp(type, "SM") && strcmp(type, "EX")));
-	Product* product = malloc(sizeof(Product));
+	Product* product = NULL;
+	product = calloc(1,sizeof(Product));
 	product->id = id;
 	strcpy(product->type, type);
 	strcpy(product->name, name);
-	strcpy(product->description, description);
+	if(!strcmp(type, "SD"))
+		strcpy(product->description, description);
 	product->is_available = is_available;
-	if(!strcmp(type, "SD") || !strcmp(type, "BB")){
-		for(int i=0; i<3; i++)
-			product->price[i] = price[i];
-	}else
-		product->price[0] = price[0];
+	for(int i=0; i<3; i++)
+		product->price[i] = price[i];
 	return product;
 }
+
 
 LinkedList* create_product_from_file(LinkedList* ll){
 	assert(ll);
 	LinkedList* list_commands = ll;
 	LinkedList* list_products = NULL;
+	int i=0;
 	while(list_commands != NULL){
 		char type[3];
 		Product* product = NULL;
 		sscanf(list_commands->info, "%[^;]", type);
 		if(!strcmp(type, "SD") || !strcmp(type, "BB") ||
-			!strcmp(type, "SM") || !strcmp(type, "EX")){
+			!strcmp(type, "SM") || !strcmp(type, "EX")){ 
 				int id;
 				char name[SIZE_NAME], description[SIZE_DESCRIPTION], price_str[SIZE_LINE];
 				char is_available;
@@ -146,21 +146,21 @@ LinkedList* create_product_from_file(LinkedList* ll){
 						type, &id, name,  &is_available, price_str);
 				is_available = is_available == 'D';
 				price = get_price_from_str(type, price_str);
-				product = create_product(type, id, name, description, is_available, price);
+				product = create_product(type, id, name, description, (int)is_available, price);
 				print_product(product);
 				list_products = ll_insert(list_products, product);
 				free(price);
-				list_commands = list_commands->prox;
-			}
-		else
-			list_commands = list_commands->prox;
+		}
+		list_commands = list_commands->prox;
 	}
 	return list_products;
 }
 
 void process_submenu_choice(int choice, char* type){
 	if(choice == create){
-		Product* product = get_product_keyboard(type);
+		Product* product = NULL;
+		product = get_product_keyboard(type);
+		print_product(product);
 		//TODO: gravar em arquivo
 	}
 	//TODO: imprimir todos

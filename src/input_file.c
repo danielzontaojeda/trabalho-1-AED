@@ -20,8 +20,5 @@ LinkedList* read_file(char* filename){
 	}
 	// TODO: remove
 	fclose(file);
-	printf("DEBUG:\n");
-	ll_print(commands_from_file);
-	printf("size: %d\n", ll_length(commands_from_file));
 	return commands_from_file;
 }

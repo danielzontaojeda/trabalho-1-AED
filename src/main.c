@@ -47,9 +47,10 @@ void process_choice(int choice){
 		break;
 	case load_file:
 		;
-		LinkedList* commands = load_from_file("dados.txt");
-		LinkedList* list_product = create_product_from_file(commands);
-		ll_delete(commands);
+		LinkedList* commands = NULL;
+		LinkedList* list_product = NULL;
+		commands =  load_from_file("dados.txt");
+		list_product = create_product_from_file(commands);
 		break;
 	}
 }
@@ -60,6 +61,6 @@ int main(){
 	print_menu();
 	scanf("%d", &option);
 	process_choice(option);
-
+	printf("DEBUG: terminou\n");
 	return 0;
 }

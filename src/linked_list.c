@@ -23,6 +23,7 @@ LinkedList* ll_insert(LinkedList* l, void* info){
 		return node;
 	} 
 	l->prox = ll_insert(l->prox, info);
+	return l;
 }
 
 int ll_length(LinkedList* l){
