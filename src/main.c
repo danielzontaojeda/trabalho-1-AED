@@ -6,6 +6,8 @@
 #include "product.h"
 #include "binary_file.h"
 
+#define __DEBUG
+
 enum choices {sandwich = 1, drink, dessert, extra, order, load_file};
 
 LinkedList *load_from_file(char *filename){
@@ -63,6 +65,8 @@ int main(){
 	print_menu();
 	scanf("%d", &option);
 	process_choice(option);
-	printf("DEBUG: terminou\n");
+	#ifdef __DEBUG
+		printf("DEBUG: fim do programa\n");
+	#endif
 	return 0;
 }

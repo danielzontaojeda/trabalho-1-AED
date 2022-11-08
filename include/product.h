@@ -15,7 +15,7 @@ enum choice_enum {create = 1, print};
 
 // estrutura de no para os produtos
 typedef struct product{
-	char type[2]; 						// tipo do produto (SD, BB, EX, SM ou PD)
+	char type[3]; 						// tipo do produto (SD, BB, EX, SM ou PD)
 	int id;								// id no produto no arquivo
 	char name[SIZE_NAME];				// nome do produto
 	char description[SIZE_DESCRIPTION];	// descricao do produto apenas para sanduiches

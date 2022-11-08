@@ -127,7 +127,6 @@ LinkedList *create_product_from_file(LinkedList *ll){
 	assert(ll);
 	LinkedList *list_commands = ll;
 	LinkedList *list_products = NULL;
-	int i=0;
 	while(list_commands != NULL){
 		char type[3];
 		Product *product = NULL;
@@ -147,7 +146,9 @@ LinkedList *create_product_from_file(LinkedList *ll){
 				is_available = is_available == 'D';
 				price = get_price_from_str(type, price_str);
 				product = create_product(type, id, name, description, (int)is_available, price);
+				#ifdef __DEBUG
 				print_product(product);
+				#endif 
 				list_products = ll_insert(list_products, product);
 				free(price);
 		}

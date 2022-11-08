@@ -27,5 +27,9 @@
     "**/.*/**",
     "**/.vscode",
     "**/.vscode/**"
-  ]
+  ],
+  "files.associations": {
+    "dirent.h": "c",
+    "crtdefs.h": "c"
+  }
 }
