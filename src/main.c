@@ -4,16 +4,17 @@
 #include "linked_list.h"
 #include "screen.h"
 #include "product.h"
+#include "binary_file.h"
 
 enum choices {sandwich = 1, drink, dessert, extra, order, load_file};
 
-LinkedList* load_from_file(char* filename){
-	LinkedList* commands_from_file = NULL;
+LinkedList *load_from_file(char *filename){
+	LinkedList *commands_from_file = NULL;
 	commands_from_file = read_file(filename);
 	return commands_from_file;
 }
 
-void clear_linked_list(LinkedList* ll){
+void clear_linked_list(LinkedList *ll){
 	ll_delete(ll);
 	ll = NULL;
 }
@@ -47,10 +48,11 @@ void process_choice(int choice){
 		break;
 	case load_file:
 		;
-		LinkedList* commands = NULL;
-		LinkedList* list_product = NULL;
+		LinkedList *commands = NULL;
+		LinkedList *list_product = NULL;
 		commands =  load_from_file("dados.txt");
 		list_product = create_product_from_file(commands);
+		write_product_list_to_file(list_product);
 		break;
 	}
 }

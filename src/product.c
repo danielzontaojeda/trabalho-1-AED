@@ -14,16 +14,16 @@ static int get_id(){
 	return id;
 }
 
-static char* get_name(){
-	char* name = malloc(SIZE_NAME);
+static char *get_name(){
+	char *name = malloc(SIZE_NAME);
 	printf("Digite o nome do produto.\n");
 	fgets(name, SIZE_NAME, stdin);
 	remove_new_line(name);
 	return name;
 }
 
-static char* get_description(const char* type){
-	char* description = malloc(SIZE_DESCRIPTION);
+static char *get_description(const char *type){
+	char *description = malloc(SIZE_DESCRIPTION);
 	if(strcmp(type, "SD") == 0){
 		printf("Digite a descricao do produto.\n");
 		fflush(stdin);
@@ -40,9 +40,9 @@ static int get_availability(){
 	return is_available;
 }
 
-double* get_price_from_str(const char* type, char* price_str){
+double *get_price_from_str(const char *type, char *price_str){
 	char price_split[2][10];
-	double* price = calloc(3,sizeof(double));
+	double *price = calloc(3,sizeof(double));
 	if(!strcmp(type, "SD") || !strcmp(type, "BB")){
 		sscanf(price_str, "%[^;];%[^;];%[^\n]%*c", price_split[0], price_split[1], price_split[2]);
 		for(int i=0;i<3;i++){
@@ -56,8 +56,8 @@ double* get_price_from_str(const char* type, char* price_str){
 	return price;
 }
 
-static double* get_price(const char* type){
-	double* price;
+static double *get_price(const char *type){
+	double *price;
 	char temp[SIZE_LINE];
 	if(!strcmp(type, "SD") || !strcmp(type, "BB")){
 		printf("Digite os precos para o produto pequeno, medio e grande.\n");
@@ -71,7 +71,7 @@ static double* get_price(const char* type){
 	return price;
 }
 
-void print_product(Product* product){
+void print_product(Product *product){
 	printf("-------------------------------------------\n");
 	printf("id: %d\n",product->id);
 	printf("type: %s\n", product->type);
@@ -90,26 +90,26 @@ void print_product(Product* product){
 	printf("-------------------------------------------\n");
 }
 
-Product* get_product_keyboard(const char* type){
+Product *get_product_keyboard(const char *type){
 	assert(!(strcmp(type, "SD") && strcmp(type, "BB") &&
 		strcmp(type, "SM") && strcmp(type, "EX")));
 	int id = get_id();
-	char* name = get_name();
-	char* description = get_description(type);
+	char *name = get_name();
+	char *description = get_description(type);
 	int is_available = get_availability();
-	double* price = get_price(type);
-	Product* product = create_product(type, id, name, description, is_available, price);	
+	double *price = get_price(type);
+	Product *product = create_product(type, id, name, description, is_available, price);	
 	free(name);
 	free(description); 
 	free(price);
 	return product;
 }
 
-Product* create_product(const char* type, int id, char* name, char* description, 
-						int is_available, double* price){
+Product *create_product(const char *type, int id, char *name, char *description, 
+						int is_available, double *price){
 	assert(!(strcmp(type, "SD") && strcmp(type, "BB") &&
 		strcmp(type, "SM") && strcmp(type, "EX")));
-	Product* product = NULL;
+	Product *product = NULL;
 	product = calloc(1,sizeof(Product));
 	product->id = id;
 	strcpy(product->type, type);
@@ -123,21 +123,21 @@ Product* create_product(const char* type, int id, char* name, char* description,
 }
 
 
-LinkedList* create_product_from_file(LinkedList* ll){
+LinkedList *create_product_from_file(LinkedList *ll){
 	assert(ll);
-	LinkedList* list_commands = ll;
-	LinkedList* list_products = NULL;
+	LinkedList *list_commands = ll;
+	LinkedList *list_products = NULL;
 	int i=0;
 	while(list_commands != NULL){
 		char type[3];
-		Product* product = NULL;
+		Product *product = NULL;
 		sscanf(list_commands->info, "%[^;]", type);
 		if(!strcmp(type, "SD") || !strcmp(type, "BB") ||
 			!strcmp(type, "SM") || !strcmp(type, "EX")){ 
 				int id;
 				char name[SIZE_NAME], description[SIZE_DESCRIPTION], price_str[SIZE_LINE];
 				char is_available;
-				double* price;
+				double *price;
 				if(!strcmp(type, "SD"))
 					sscanf(list_commands->info, "%[^;];%d;%[^;];%[^;];%c;%[^\n]%*c",
 						type, &id, name, description, &is_available, price_str);
@@ -156,9 +156,9 @@ LinkedList* create_product_from_file(LinkedList* ll){
 	return list_products;
 }
 
-void process_submenu_choice(int choice, char* type){
+void process_submenu_choice(int choice, char *type){
 	if(choice == create){
-		Product* product = NULL;
+		Product *product = NULL;
 		product = get_product_keyboard(type);
 		print_product(product);
 		//TODO: gravar em arquivo

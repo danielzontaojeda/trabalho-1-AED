@@ -10,6 +10,6 @@
 // Retorno: lista encadeada com os elementos do arquivo texto
 // Pré-condições: arquivo texto existe
 // Pós-condições: nenhuma
-LinkedList* read_file(char* filename);
+LinkedList *read_file(char* filename);
 
 #endif

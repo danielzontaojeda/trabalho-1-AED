@@ -2,12 +2,12 @@
 
 #include "util.h"
 
-void replace_char(char* string, char oldchar, char newchar){
-	char* position = strchr(string, oldchar);
+void replace_char(char *string, char oldchar, char newchar){
+	char *position = strchr(string, oldchar);
 	if(position != NULL)
-		*position = newchar;
+		 *position = newchar;
 }
 
-void remove_new_line(char* string){
+void remove_new_line(char *string){
 	string[strcspn(string, "\n")] = 0;
 }

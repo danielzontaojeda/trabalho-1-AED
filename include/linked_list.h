@@ -14,36 +14,36 @@ typedef struct no {
 // Retorno: 1 se a lista é vazia ou 0 caso contrário
 // Pré-condição: nenhuma
 // Pós-condição: nenhuma
-int ll_is_empty(LinkedList* l);
+int ll_is_empty(LinkedList *l);
 
 // Insere um elemento na lista
 // Entrada: lista e elemento a ser inserido
 // Retorno: lista alterada
 // Pré-condição: nenhuma
 // Pós-condição: elemento é inserido na lista
-LinkedList* ll_insert(LinkedList* l, void* info);
+LinkedList *ll_insert(LinkedList *l, void *info);
 
 // Remove um elemento da lista
 // Entrada: lista e elemento a ser removido
 // Retorno: lista alterada
 // Pré-condição: nenhuma
 // Pós-condição: elemento é removido da lista
-LinkedList* ll_remove(LinkedList* l, void* info);
+LinkedList *ll_remove(LinkedList *l, void *info);
 
 // Imprime os elementos da lista
 // Entrada: lista
 // Retorno: nenhum
 // Pré-condição: nenhuma
 // Pós-condição: os elementos são impressos no console
-void ll_print(LinkedList* l);
+void ll_print(LinkedList *l);
 
 // Deleta todos os elementos da lista
 // Entrada: lista
 // Retorno: nenhum
 // Pré-condições: nenhuma
 // Pós-condições: elementos da lista desalocados e desencadeados
-void ll_delete(LinkedList* l);
+void ll_delete(LinkedList *l);
 
-int ll_length(LinkedList* l);
+int ll_length(LinkedList *l);
 
 #endif

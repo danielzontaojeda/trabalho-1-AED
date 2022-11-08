@@ -6,13 +6,13 @@
 // Retorno: nenhum
 // Pré-condições: nenhum
 // Pós-condições: primeira ocorrencia de oldchar substituido por newchar
-void replace_char(char* string, char oldchar, char newchar);
+void replace_char(char *string, char oldchar, char newchar);
 
 // Remove \n do fim da string
 // Entrada: string com \n
 // Retorno: nenhum
 // Pré-condições: string com \n no final
 // Pós-condições: \n removido do final da string
-void remove_new_line(char* buffer);
+void remove_new_line(char *buffer);
 
 #endif
