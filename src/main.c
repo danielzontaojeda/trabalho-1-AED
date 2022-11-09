@@ -5,8 +5,7 @@
 #include "screen.h"
 #include "product.h"
 #include "binary_file.h"
-
-#define __DEBUG
+#include "debug.h"
 
 enum choices {sandwich = 1, drink, dessert, extra, order, load_file};
 

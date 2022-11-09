@@ -4,6 +4,7 @@
 #include <assert.h>
 
 #include "input_file.h"
+#include "debug.h"
 
 #define SIZE_LINE sizeof(char)*500
 
@@ -20,5 +21,8 @@ LinkedList *read_file(char *filename){
 	}
 	// TODO: remove
 	fclose(file);
+	#ifdef __DEBUG
+		printf("DEBUG: Read %d lines from file %s\n", ll_length(commands_from_file), filename);
+	#endif
 	return commands_from_file;
 }

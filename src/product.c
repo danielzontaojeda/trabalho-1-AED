@@ -87,6 +87,7 @@ void print_product(Product *product){
 	}else{
 		printf("price: %.2lf\n", product->price[0]);
 	}
+	printf("next: %d\n",product->next);
 	printf("-------------------------------------------\n");
 }
 

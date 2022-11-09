@@ -4,9 +4,9 @@
 #include "linked_list.h"
 
 // tamanho maximo do campo name
-#define SIZE_NAME 50
+#define SIZE_NAME 51
 // tamanho maximo do campo description
-#define SIZE_DESCRIPTION 200
+#define SIZE_DESCRIPTION 201
 // tamanho maximo que uma linha de comandos do arquivo texto
 #define SIZE_LINE (SIZE_NAME + SIZE_DESCRIPTION + 100)
 
@@ -22,6 +22,7 @@ typedef struct product{
 	int is_available;					// 1 = disponivel, 0 = nao disponivel
 	double price[3];					// preco[0] = pequeno, preco[1] = medio, preco[2] = grande
 										// preco de produtos sem tamanho vao em preco[0]
+	int next;							// posicao do proximo no no arquivo
 } Product;
 
 // Imprime informacoes do produto na tela
