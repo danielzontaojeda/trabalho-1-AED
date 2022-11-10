@@ -12,9 +12,16 @@ FILE *get_database_product(){
 	char filename[100];
 	strcpy(filename, DATABASE_FOLDER);
 	strcat(filename, "/product");
-	FILE *file = fopen(filename, "w+b");
+	FILE *file = fopen(filename, "r+b");
+	if(file == NULL) file = fopen(filename, "w+b");
 	assert(file);
 	return file;
+}
+
+int is_file_empty(FILE *database){
+	fseek(database, 0, SEEK_END);
+	int is_empty = ftell(database) == 0;
+	return is_empty;
 }
 
 void create_database_directory(){
@@ -39,6 +46,7 @@ Product *read_node(FILE *database_product, int pos){
 void print_all_products_in_file(FILE *database_product){
 	Header *header = read_header(database_product);
 	Product *product = read_node(database_product, header->pos_head);
+	if(product == NULL) printf("Nenhum produto encontrado.\n");
 	while(product){
 		int next = product->next;
 		free(product);
@@ -63,6 +71,7 @@ void write_product_list_to_file(LinkedList *list_products){
 		print_all_products_in_file(database_product);
 	#endif
 	printf("%d produtos adicionados ao banco de dados!\n", size);
+	fclose(database_product);
 }
 
 static void insert_product(Product *product, FILE *database_product){

@@ -25,4 +25,6 @@ void write_product_list_to_file(LinkedList *list_products);
 
 void write_product_to_file(Product *product, FILE *database_product);
 
+int is_file_empty(FILE *database);
+
 #endif
