@@ -94,6 +94,7 @@ Header *read_header(FILE *database){
 
 static void insert_product(Product *product, FILE *database_product){
 	Header *header = read_header(database_product);
+	assert(header);
 	if(header->pos_free == EMPTY){
 		product->next = header->pos_head;
 		fseek(database_product, sizeof(Header) + header->pos_top * sizeof(Product), SEEK_SET);
@@ -104,9 +105,10 @@ static void insert_product(Product *product, FILE *database_product){
 		header->pos_head = header->pos_top;
 		header->pos_top += 1;
 		fseek(database_product, 0, SEEK_SET);
-		fwrite(header, sizeof(Header), 1, database_product);
+		assert(fwrite(header, sizeof(Header), 1, database_product));
 	}else{
 		//TODO: implement
+		abort();
 	}
 	free(header);
 }
