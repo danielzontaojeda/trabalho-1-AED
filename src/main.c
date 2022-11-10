@@ -51,7 +51,7 @@ void process_choice(int choice){
 		;
 		LinkedList *commands = NULL;
 		LinkedList *list_product = NULL;
-		commands =  load_from_file("dados2.txt");
+		commands =  load_from_file("dados.txt");
 		list_product = create_product_from_file(commands);
 		write_product_list_to_file(list_product);
 		break;

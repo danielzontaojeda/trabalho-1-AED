@@ -6,8 +6,7 @@
 
 #include "binary_file.h"
 #include "debug.h"
-
-#define EMPTY -1
+#include "header.h"
 
 FILE *get_database_product(){
 	char filename[100];
@@ -17,22 +16,6 @@ FILE *get_database_product(){
 	assert(file);
 	return file;
 }
-
-static void create_header(FILE* database){
-	Header *header = malloc(sizeof(Header));
-	header->pos_top = 0;
-	header->pos_head = EMPTY;
-	header->pos_free = EMPTY;
-	assert(fwrite(header, sizeof(Header), 1, database));
-	free(header);
-	#ifdef __DEBUG
-		printf("DEBUG: Header written\n");
-	#endif
-}
-
-FILE *get_database_completed_orders();
-
-FILE *get_queue_orders();
 
 void create_database_directory(){
 	#ifdef __linux__
@@ -65,8 +48,8 @@ void print_all_products_in_file(FILE *database_product){
 }
 
 void write_product_list_to_file(LinkedList *list_products){
-	// TODO: file not empty
 	assert(list_products);
+	int size = 0;
 	create_database_directory();
 	FILE* database_product = get_database_product();
 	LinkedList *ll = list_products;
@@ -74,22 +57,12 @@ void write_product_list_to_file(LinkedList *list_products){
 	while(ll != NULL){
 		write_product_to_file(ll->info, database_product);
 		ll = ll->prox;
+		size++;
 	}
 	#ifdef __DEBUG
-		printf("DEBUG: All products written\n");
 		print_all_products_in_file(database_product);
 	#endif
-}
-
-Header *read_header(FILE *database){
-	Header *header = malloc(sizeof(Header));
-	fseek(database, 0, SEEK_SET);
-	fread(header, sizeof(Header), 1, database);
-	assert(header);
-	#ifdef __DEBUG
-		printf("DEBUG: read_head -> top = %d, head = %d, free = %d\n", header->pos_top, header->pos_head, header->pos_free);
-	#endif
-	return header;
+	printf("%d produtos adicionados ao banco de dados!\n", size);
 }
 
 static void insert_product(Product *product, FILE *database_product){
@@ -119,6 +92,3 @@ void write_product_to_file(Product *product, FILE *database_product){
 	#endif
 	insert_product(product, database_product);
 }
-
-Product *get_product();
-
