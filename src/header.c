@@ -7,7 +7,15 @@
 #include "debug.h"
 #include "binary_file.h"
 
+// Cria, inicializa e grava um cabecalho em database caso
+// um cabecalho ainda nao exista
+// Entrada: ponteiro para arquivo de banco de dados
+// Retorno: nenhum
+// Pré-condições: database e um ponteiro para arquivo valido
+// Pós-condições: cabecalho gravado em database caso 
+// 				  database ainda nao tenha um cabecalho
 void create_header(FILE* database){
+	assert(database);
 	Header *header = read_header(database);
 	if(header == NULL){
 		Header *header = malloc(sizeof(Header));
@@ -26,7 +34,14 @@ void create_header(FILE* database){
 	free(header);
 }
 
+// Caso database esteja vazia, retorna NULL
+// caso contrario, retorna seu cabecalho
+// Entrada: ponteiro para banco de dados
+// Retorno: ponteiro para estrutura de cabecalho do arquivo
+// Pré-condições: database e um ponteiro para arquivo valido
+// Pós-condições: estrutura de cabecalho alocada e retornada
 Header *read_header(FILE *database){
+	assert(database);
 	if(is_file_empty(database) == 1) return NULL;
 	Header *header = malloc(sizeof(Header));
 	fseek(database, 0, SEEK_SET);
