@@ -43,10 +43,10 @@ int is_file_empty(FILE *database){
 // Pós-condições: Pasta 'database' criada
 void create_database_directory(){
 	#ifdef __linux__
-       mkdir(DATABASE_FOLDER, 777); 
-   #else
-       _mkdir(DATABASE_FOLDER);
-   #endif
+		mkdir(DATABASE_FOLDER, 777); 
+	#else
+		_mkdir(DATABASE_FOLDER);
+	#endif
 }
 
 // Retorna produto da posicao pos no arquivo database_product
@@ -64,21 +64,21 @@ Product *read_node(FILE *database_product, int pos){
 }
 
 // Imprime em stdout todos os produtos do tipo type em database_product
+// caso type seja nulo, imprime todos os produtos
 // Entrada: ponteiro para o banco de dados de produtos
 //        	tipo do produto
 // Retorno: nenhum
-// Pré-condições: type e um tipo de produto valido
+// Pré-condições: type e um tipo de produto valido ou NULL
 //                database_product e um ponteiro valido
 // Pós-condições: todos os produtos do tipo type impressos em stdout 
 void print_all_products_in_file(FILE *database_product, char *type){
-	assert(is_type_of_product(type));
 	assert(database_product);
 	Header *header = read_header(database_product);
 	Product *product = read_node(database_product, header->pos_head);
 	if(product == NULL) printf("Nenhum produto encontrado.\n");
 	while(product){
 		int next = product->next;
-		if(!strcmp(product->type, type))
+		if(!strcmp(product->type, type) || type == NULL)
 			print_product(product);
 		free(product);
 		product = read_node(database_product, next);
@@ -104,7 +104,7 @@ void write_product_list_to_file(LinkedList *list_products){
 		size++;
 	}
 	#ifdef __DEBUG
-		print_all_products_in_file(database_product);
+		print_all_products_in_file(database_product, NULL);
 	#endif
 	printf("%d produtos adicionados ao banco de dados!\n", size);
 	fclose(database_product);
