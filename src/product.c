@@ -129,7 +129,7 @@ void print_product(Product *product){
 	printf("-------------------------------------------\n");
 	printf("id: %d\n",product->id);
 	printf("tipo: %s\n", get_product_type_name(product->type));
-	printf("name: %s\n", product->name);
+	printf("nome: %s\n", product->name);
 	if(strcmp(product->type, "SD") == 0)
 		printf("description: %s\n", product->description);
 	printf("disponivel: %s\n", (product->is_available?"sim":"nao"));
