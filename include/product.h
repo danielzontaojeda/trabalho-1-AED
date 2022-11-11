@@ -25,11 +25,11 @@ typedef struct product{
 	int next;							// posicao do proximo no no arquivo
 } Product;
 
-// Imprime informacoes do produto na tela
-// Entrada: estrutura de produto
+// Imprime em stdout as informacoes de product
+// Entrada: ponteiro para estrutura de produto
 // Retorno: nenhum
-// Pré-condições: nenhum
-// Pós-condições: informacoes impressas na tela
+// Pré-condições: nenhuma
+// Pós-condições: informacoes do produto impressas em stdout
 void print_product(Product *product);
 
 // Chama o fluxo necessario para criar o produto a partir do terminal
@@ -54,12 +54,26 @@ void process_submenu_choice(int choice, char *type);
 Product *create_product(const char *type, int id, char *name,
 	char *description, int is_available, double *price);
 
-
 // Cria lista encadeada com produtos utilizando comandos de list_commands
 // Entrada: lista encadeada contendo os comandos do arquivo de entrada
 // Retorno: lista encadeada contendo produtos
 // Pré-condições: lista de comandos nao nula com formato valido
 // Pós-condições: lista encadeada contendo produtos retornada
 LinkedList *create_product_from_file(LinkedList *list_commands);
+
+// Retorna 1 caso type seja um tipo de produto
+// caso contrario retorna 0
+// Entrada: tipo do produto
+// Retorno: 1 ou 0
+// Pré-condições: nenhuma
+// Pós-condições: 1 ou 0 retornado
+int is_type_of_product(const char *type);
+
+// Retorna nome inteiro do tipo do produto
+// Entrada: tipo do produto
+// Retorno: string com o nome inteiro do tipo do produto
+// Pré-condições: type e um tipo valido de produto
+// Pós-condições: nome inteiro do tipo do produto retornado
+char *get_product_type_name(const char *type);
 
 #endif

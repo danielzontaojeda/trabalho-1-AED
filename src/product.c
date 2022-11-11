@@ -9,6 +9,11 @@
 #include "screen.h"
 #include "header.h"
 
+// Pega valor do id do produto de stdin
+// Entrada: Nenhuma
+// Retorno: id do produto
+// Pré-condições: nenhuma
+// Pós-condições: id retornado
 static int get_id(){
 	int id = 0;
 	printf("Digite o id do produto.\n");
@@ -16,6 +21,11 @@ static int get_id(){
 	return id;
 }
 
+// Pega nome do produto de stdin. E necessario desalocar o retorno.
+// Entrada: nenhuma
+// Retorno: nome do produto em vetor dinamicamente alocado
+// Pré-condições: nenhuma
+// Pós-condições: nome retornado
 static char *get_name(){
 	char *name = malloc(SIZE_NAME);
 	printf("Digite o nome do produto.\n");
@@ -24,6 +34,11 @@ static char *get_name(){
 	return name;
 }
 
+// Pega descricao do produto de stdin. E necessario desalocar o retorno.
+// Entrada: nenhuma
+// Retorno: descricao do produto em vetor dinamicamente alocado
+// Pré-condições: nenhuma
+// Pós-condições: descricao retornado
 static char *get_description(const char *type){
 	char *description = malloc(SIZE_DESCRIPTION);
 	if(strcmp(type, "SD") == 0){
@@ -35,6 +50,11 @@ static char *get_description(const char *type){
 	return description;
 }
 
+// Verifica com o usuario se o produto esta disponivel
+// Entrada: Nenhuma
+// Retorno: Valor 0 (nao disponivel) ou 1 (disponivel)
+// Pré-condições: nenhuma
+// Pós-condições: disponibilidade retornada
 static int get_availability(){
 	int is_available;
 	printf("Produto disponivel? (1 = SIM, 0 = NAO)\n");
@@ -42,7 +62,14 @@ static int get_availability(){
 	return is_available;
 }
 
-double *get_price_from_str(const char *type, char *price_str){
+// Converte string em vetor de double representando preco
+// Entrada: tipo do produto e string com seu(s) preco(s) separados por ;
+// Retorno: vetor de double dinamicamente alocado
+// Pré-condições: type e algum tipo de produto
+//				  preco_str e um preco ou tres precos separados por ;
+// Pós-condições: vetor de doubles com preco retornado
+static double *get_price_from_str(const char *type, char *price_str){
+	assert(is_type_of_product(type));
 	char price_split[2][10];
 	double *price = calloc(3,sizeof(double));
 	if(!strcmp(type, "SD") || !strcmp(type, "BB")){
@@ -58,7 +85,13 @@ double *get_price_from_str(const char *type, char *price_str){
 	return price;
 }
 
+// Pega o(s) valor(es) do(s) preco(s) de stdin
+// Entrada: tipo do produto
+// Retorno: vetor de double dinamicamente alocado
+// Pré-condições: type e um tipo valido de produto
+// Pós-condições: vetor com os precos retornado
 static double *get_price(const char *type){
+	assert(is_type_of_product(type));
 	double *price;
 	char temp[SIZE_LINE];
 	if(!strcmp(type, "SD") || !strcmp(type, "BB")){
@@ -73,26 +106,51 @@ static double *get_price(const char *type){
 	return price;
 }
 
+// Retorna nome inteiro do tipo do produto
+// Entrada: tipo do produto
+// Retorno: string com o nome inteiro do tipo do produto
+// Pré-condições: type e um tipo valido de produto
+// Pós-condições: nome inteiro do tipo do produto retornado
+char *get_product_type_name(const char *type){
+	assert(is_type_of_product(type));
+	if(!strcmp(type,"SD")) return "sanduiche";
+	if(!strcmp(type,"BB")) return "bebida";
+	if(!strcmp(type,"EX")) return "extra";
+	if(!strcmp(type,"SM")) return "sobremesa";
+	return NULL;
+}
+
+// Imprime em stdout as informacoes de product
+// Entrada: ponteiro para estrutura de produto
+// Retorno: nenhum
+// Pré-condições: nenhuma
+// Pós-condições: informacoes do produto impressas em stdout
 void print_product(Product *product){
 	printf("-------------------------------------------\n");
 	printf("id: %d\n",product->id);
-	printf("type: %s\n", product->type);
+	printf("tipo: %s\n", get_product_type_name(product->type));
 	printf("name: %s\n", product->name);
 	if(strcmp(product->type, "SD") == 0)
 		printf("description: %s\n", product->description);
-	printf("is_available: %d\n", product->is_available);
+	printf("disponivel: %s\n", (product->is_available?"sim":"nao"));
 	if(!strcmp(product->type, "SD") || !strcmp(product->type, "BB")){
-		printf("price: ");
+		printf("preco: ");
 		for(int i=0;i<3;i++)
 			printf("%.2lf ", product->price[i]);
 		printf("\n");
-	}else{
-		printf("price: %.2lf\n", product->price[0]);
-	}
-	printf("next: %d\n",product->next);
+	}else
+		printf("preco: %.2lf\n", product->price[0]);
+	#ifdef __DEBUG
+		printf("next: %d\n",product->next);
+	#endif
 	printf("-------------------------------------------\n");
 }
 
+// Chama o fluxo necessario para criar o produto a partir do terminal
+// Entrada: tipo do produto a ser criado
+// Retorno: estrutura de produto 
+// Pré-condições: tipo do produto valido
+// Pós-condições: estrutura de produto retornada
 Product *get_product_keyboard(const char *type){
 	assert(!(strcmp(type, "SD") && strcmp(type, "BB") &&
 		strcmp(type, "SM") && strcmp(type, "EX")));
@@ -108,6 +166,11 @@ Product *get_product_keyboard(const char *type){
 	return product;
 }
 
+// Cria entidade produto
+// Entrada: tipo do produto e seus valores
+// Retorno: entidade produto
+// Pré-condições: tipo do produto valido
+// Pós-condições: produto retornado
 Product *create_product(const char *type, int id, char *name, char *description, 
 						int is_available, double *price){
 	assert(!(strcmp(type, "SD") && strcmp(type, "BB") &&
@@ -125,12 +188,22 @@ Product *create_product(const char *type, int id, char *name, char *description,
 	return product;
 }
 
-int is_type_of_product(char *type){
+// Retorna 1 caso type seja um tipo de produto
+// caso contrario retorna 0
+// Entrada: tipo do produto
+// Retorno: 1 ou 0
+// Pré-condições: nenhuma
+// Pós-condições: 1 ou 0 retornado
+int is_type_of_product(const char *type){
 	return(!strcmp(type, "SD") || !strcmp(type, "BB") ||
 		!strcmp(type, "SM") || !strcmp(type, "EX"));
 }
 
-
+// Cria lista encadeada com produtos utilizando comandos de list_commands
+// Entrada: lista encadeada contendo os comandos do arquivo de entrada
+// Retorno: lista encadeada contendo produtos
+// Pré-condições: lista de comandos nao nula com formato valido
+// Pós-condições: lista encadeada contendo produtos retornada
 LinkedList *create_product_from_file(LinkedList *ll){
 	assert(ll);
 	LinkedList *list_commands = ll;
@@ -139,8 +212,7 @@ LinkedList *create_product_from_file(LinkedList *ll){
 		char type[3];
 		Product *product = NULL;
 		sscanf(list_commands->info, "%[^;]", type);
-		if(!strcmp(type, "SD") || !strcmp(type, "BB") ||
-			!strcmp(type, "SM") || !strcmp(type, "EX")){ 
+		if(is_type_of_product(type)){ 
 				int id;
 				char name[SIZE_NAME], description[SIZE_DESCRIPTION], price_str[SIZE_LINE];
 				char is_available;
@@ -165,6 +237,11 @@ LinkedList *create_product_from_file(LinkedList *ll){
 	return list_products;
 }
 
+// Executa o fluxo do programa correto para a escolha realizada
+// Entrada: escolha selecionada e tipo do produto
+// Retorno: nenhum
+// Pré-condições: escolha valida de acordo com enum choices
+// Pós-condições: nenhum
 void process_submenu_choice(int choice, char *type){
 	if(choice == create){
 		Product *product = NULL;
