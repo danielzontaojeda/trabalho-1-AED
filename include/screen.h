@@ -18,4 +18,8 @@ void print_extra_menu();
 
 void print_order_menu();
 
+void clear_screen();
+
+void press_enter_to_continue();
+
 #endif

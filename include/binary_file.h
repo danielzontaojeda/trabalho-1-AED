@@ -27,4 +27,6 @@ void write_product_to_file(Product *product, FILE *database_product);
 
 int is_file_empty(FILE *database);
 
+void print_all_products_in_file(FILE *database_product, char *type);
+
 #endif

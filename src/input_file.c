@@ -19,7 +19,6 @@ LinkedList *read_file(char *filename){
 		commands_from_file = ll_insert(commands_from_file, line);
 		line = malloc(SIZE_LINE);
 	}
-	// TODO: remove
 	fclose(file);
 	#ifdef __DEBUG
 		printf("DEBUG: Read %d lines from file %s\n", ll_length(commands_from_file), filename);

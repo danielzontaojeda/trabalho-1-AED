@@ -7,7 +7,7 @@
 #include "binary_file.h"
 #include "debug.h"
 
-enum choices {sandwich = 1, drink, dessert, extra, order, load_file};
+enum choices {exit, sandwich, drink, dessert, extra, order, load_file};
 
 LinkedList *load_from_file(char *filename){
 	LinkedList *commands_from_file = NULL;
@@ -20,9 +20,11 @@ void clear_linked_list(LinkedList *ll){
 	ll = NULL;
 }
 
-void process_choice(int choice){
+int process_choice(int choice){
 	int submenu_choice;
 	switch (choice){
+	case exit:
+		break;
 	case sandwich:
 		print_sandwich_menu();
 		scanf("%d%*c",&submenu_choice);
@@ -54,16 +56,23 @@ void process_choice(int choice){
 		commands =  load_from_file("dados.txt");
 		list_product = create_product_from_file(commands);
 		write_product_list_to_file(list_product);
+		press_enter_to_continue();
 		break;
 	}
+	return submenu_choice;
 }
 
 int main(){
 	int option;
 
 	print_menu();
-	scanf("%d", &option);
-	process_choice(option);
+	scanf("%d%*c", &option);
+	while(option != 0){
+		process_choice(option);
+		clear_screen();
+		print_menu();
+		scanf("%d%*c", &option);
+	}
 	#ifdef __DEBUG
 		printf("DEBUG: fim do programa\n");
 	#endif

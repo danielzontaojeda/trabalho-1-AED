@@ -11,7 +11,7 @@
 #define SIZE_LINE (SIZE_NAME + SIZE_DESCRIPTION + 100)
 
 // significado das escolhas recebidas
-enum choice_enum {create = 1, print};
+enum choice_enum {back, create, print};
 
 // estrutura de no para os produtos
 typedef struct product{

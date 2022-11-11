@@ -37,18 +37,20 @@ Product *read_node(FILE *database_product, int pos){
 	Product *product = malloc(sizeof(Product));
 	fseek(database_product, sizeof(Header) + pos*sizeof(Product), SEEK_SET);
 	fread(product, sizeof(Product), 1, database_product);
-	#ifdef __DEBUG
-		print_product(product);
-	#endif
+	// #ifdef __DEBUG
+	// 	print_product(product);
+	// #endif
 	return product;
 }
 
-void print_all_products_in_file(FILE *database_product){
+void print_all_products_in_file(FILE *database_product, char *type){
 	Header *header = read_header(database_product);
 	Product *product = read_node(database_product, header->pos_head);
 	if(product == NULL) printf("Nenhum produto encontrado.\n");
 	while(product){
 		int next = product->next;
+		if(!strcmp(product->type, type))
+			print_product(product);
 		free(product);
 		product = read_node(database_product, next);
 	}
@@ -90,7 +92,7 @@ static void insert_product(Product *product, FILE *database_product){
 		assert(fwrite(header, sizeof(Header), 1, database_product));
 	}else{
 		//TODO: implement
-		abort();
+		exit(1);
 	}
 	free(header);
 }

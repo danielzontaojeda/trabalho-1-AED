@@ -5,9 +5,11 @@
 
 #include "product.h"
 #include "util.h"
+#include "binary_file.h"
+#include "screen.h"
+#include "header.h"
 
 static int get_id(){
-	// TODO: validar id
 	int id = 0;
 	printf("Digite o id do produto.\n");
 	scanf("%d%*c",&id);
@@ -123,6 +125,11 @@ Product *create_product(const char *type, int id, char *name, char *description,
 	return product;
 }
 
+int is_type_of_product(char *type){
+	return(!strcmp(type, "SD") || !strcmp(type, "BB") ||
+		!strcmp(type, "SM") || !strcmp(type, "EX"));
+}
+
 
 LinkedList *create_product_from_file(LinkedList *ll){
 	assert(ll);
@@ -148,7 +155,7 @@ LinkedList *create_product_from_file(LinkedList *ll){
 				price = get_price_from_str(type, price_str);
 				product = create_product(type, id, name, description, (int)is_available, price);
 				#ifdef __DEBUG
-				print_product(product);
+					print_product(product);
 				#endif 
 				list_products = ll_insert(list_products, product);
 				free(price);
@@ -162,8 +169,20 @@ void process_submenu_choice(int choice, char *type){
 	if(choice == create){
 		Product *product = NULL;
 		product = get_product_keyboard(type);
+		FILE *database_product = get_database_product();
+		create_header(database_product);
+		write_product_to_file(product, database_product);
+		printf("Produto adicionado:\n");
 		print_product(product);
-		//TODO: gravar em arquivo
+		free(product);
+		fclose(database_product);
+		press_enter_to_continue();
+	}else if(choice == print){
+		if(is_type_of_product(type)){
+			FILE *database_product = get_database_product();
+			print_all_products_in_file(database_product, type);
+			fclose(database_product);
+			press_enter_to_continue();
+		}
 	}
-	//TODO: imprimir todos
 }

@@ -3,6 +3,7 @@ RM := del
 SRC_DIR := src
 OBJ_DIR := obj
 BIN_DIR := bin
+DATABASE_DIR := database
 
 EXE := $(BIN_DIR)/main.exe
 SRC := $(wildcard $(SRC_DIR)/*.c)
@@ -27,7 +28,7 @@ $(BIN_DIR) $(OBJ_DIR):
 	mkdir $@
 
 clean:
-	@$(RM) /Q $(BIN_DIR) $(OBJ_DIR)
+	@$(RM) /Q $(BIN_DIR) $(OBJ_DIR) $(DATABASE_DIR)
 
 run:
 	.\$(EXE)
