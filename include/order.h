@@ -1,3 +1,6 @@
+#ifndef __ORDER_H
+#define __ORDER_H
+
 #include "linked_list.h"
 
 typedef struct order{
@@ -16,7 +19,4 @@ void print_all_orders();
 
 int remove_order(char *cpf);
 
-
-
-
-
+#endif
