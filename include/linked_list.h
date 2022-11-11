@@ -1,6 +1,8 @@
 #ifndef __LINKED_LIST_H
 #define __LINKED_LIST_H
 
+// tipo de variavel guardada na lista
+// utilizado somente em ll_print()
 #define TYPE_VAR char*
 
 // estrutura de nó para lista encadeada
@@ -44,6 +46,11 @@ void ll_print(LinkedList *l);
 // Pós-condições: elementos da lista desalocados e desencadeados
 void ll_delete(LinkedList *l);
 
+// Retorna o numero de membros da lista
+// Entrada: lista
+// Retorno: numero de membros da lista
+// Pré-condições: nenhuma
+// Pós-condições: numero de membros da lista retornado
 int ll_length(LinkedList *l);
 
 #endif

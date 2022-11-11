@@ -48,7 +48,8 @@ Header *read_header(FILE *database){
 	fread(header, sizeof(Header), 1, database);
 	assert(header);
 	#ifdef __DEBUG
-		printf("DEBUG: read_head -> top = %d, head = %d, free = %d\n", header->pos_top, header->pos_head, header->pos_free);
+		printf("DEBUG: read_head -> top = %d, head = %d, free = %d\n", 
+		header->pos_top, header->pos_head, header->pos_free);
 	#endif
 	return header;
 }
