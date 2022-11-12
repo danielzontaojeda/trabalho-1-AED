@@ -52,7 +52,7 @@ void process_submenu_choice(int choice, char *type);
 // Pré-condições: tipo do produto valido
 // Pós-condições: produto retornado
 Product *create_product(const char *type, int id, char *name,
-	char *description, int is_available, double *price);
+	char *description, unsigned is_available, double *price);
 
 // Cria lista encadeada com produtos utilizando comandos de list_commands
 // Entrada: lista encadeada contendo os comandos do arquivo de entrada

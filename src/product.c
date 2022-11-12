@@ -55,10 +55,10 @@ static char *get_description(const char *type){
 // Retorno: Valor 0 (nao disponivel) ou 1 (disponivel)
 // Pré-condições: nenhuma
 // Pós-condições: disponibilidade retornada
-static int get_availability(){
-	int is_available;
+static unsigned get_availability(){
+	unsigned is_available;
 	printf("Produto disponivel? (1 = SIM, 0 = NAO)\n");
-	scanf("%d%*c",&is_available);
+	scanf("%u%*c",&is_available);
 	return is_available;
 }
 
@@ -157,7 +157,7 @@ Product *get_product_keyboard(const char *type){
 	int id = get_id();
 	char *name = get_name();
 	char *description = get_description(type);
-	int is_available = get_availability();
+	unsigned is_available = get_availability();
 	double *price = get_price(type);
 	Product *product = create_product(type, id, name, description, is_available, price);	
 	free(name);
@@ -172,7 +172,7 @@ Product *get_product_keyboard(const char *type){
 // Pré-condições: tipo do produto valido
 // Pós-condições: produto retornado
 Product *create_product(const char *type, int id, char *name, char *description, 
-						int is_available, double *price){
+						unsigned is_available, double *price){
 	assert(!(strcmp(type, "SD") && strcmp(type, "BB") &&
 		strcmp(type, "SM") && strcmp(type, "EX")));
 	Product *product = NULL;
@@ -225,7 +225,7 @@ LinkedList *create_product_from_file(LinkedList *ll){
 						type, &id, name,  &is_available, price_str);
 				is_available = is_available == 'D';
 				price = get_price_from_str(type, price_str);
-				product = create_product(type, id, name, description, (int)is_available, price);
+				product = create_product(type, id, name, description, is_available, price);
 				#ifdef __DEBUG
 					print_product(product);
 				#endif 
