@@ -6,7 +6,11 @@
 #include "linked_list.h"
 #include "product.h"
 
+// nome da pasta onde ficarao os banco de dados
 #define DATABASE_FOLDER "./database"
+
+// nome do arquivo guardando os dados dos produtos cadastrados
+#define DATABASE_PRODUCT "product"
 
 // Cabecalho para a funcao do sistema para criar uma pasta
 // Entrada: caminho da pasta para ser criada
@@ -15,13 +19,12 @@
 // Pós-condições: nenhuma
 int _mkdir(const char *pathname);
 
-// Cria stream para banco de dados de produtos caso ele nao exista
-// e retorna um ponteiro para tal
+// Cria stream para database_name localizado na pasta DATABASE_FOLDER
 // Entrada: nenhuma
 // Retorno: pointeiro para stream do arquivo de banco de dados dos produtos
 // Pré-condições: nenhuma
 // Pós-condições: ponteiro para o arquivo retornado
-FILE *get_database_product();
+FILE *get_database(char *database_name);
 
 // Cria pasta 'database' se ela nao existir
 // Entrada: nenhuma

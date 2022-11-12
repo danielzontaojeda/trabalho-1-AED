@@ -8,16 +8,14 @@
 #include "debug.h"
 #include "header.h"
 
-// Cria stream para banco de dados de produtos caso ele nao exista
-// e retorna um ponteiro para tal
+// Cria stream para database_name localizado na pasta DATABASE_FOLDER
 // Entrada: nenhuma
 // Retorno: pointeiro para stream do arquivo de banco de dados dos produtos
 // Pré-condições: nenhuma
 // Pós-condições: ponteiro para o arquivo retornado
-FILE *get_database_product(){
+FILE *get_database(char *database_name){
 	char filename[100];
-	strcpy(filename, DATABASE_FOLDER);
-	strcat(filename, "/product");
+	sprintf(filename, "%s/%s", DATABASE_FOLDER, database_name);
 	FILE *file = fopen(filename, "r+b");
 	if(file == NULL) file = fopen(filename, "w+b");
 	assert(file);
@@ -95,7 +93,7 @@ void write_product_list_to_file(LinkedList *list_products){
 	assert(list_products);
 	int size = 0;
 	create_database_directory();
-	FILE* database_product = get_database_product();
+	FILE* database_product = get_database(DATABASE_PRODUCT);
 	LinkedList *ll = list_products;
 	create_header(database_product);
 	while(ll != NULL){

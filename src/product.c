@@ -246,7 +246,7 @@ void process_submenu_choice(int choice, char *type){
 	if(choice == create){
 		Product *product = NULL;
 		product = get_product_keyboard(type);
-		FILE *database_product = get_database_product();
+		FILE *database_product = get_database(DATABASE_PRODUCT);
 		create_header(database_product);
 		write_product_to_file(product, database_product);
 		printf("Produto adicionado:\n");
@@ -256,7 +256,7 @@ void process_submenu_choice(int choice, char *type){
 		press_enter_to_continue();
 	}else if(choice == print){
 		if(is_type_of_product(type)){
-			FILE *database_product = get_database_product();
+			FILE *database_product = get_database(DATABASE_PRODUCT);
 			print_all_products_in_file(database_product, type);
 			fclose(database_product);
 			press_enter_to_continue();
