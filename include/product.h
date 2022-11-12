@@ -19,7 +19,7 @@ typedef struct product{
 	int id;								// id no produto no arquivo
 	char name[SIZE_NAME];				// nome do produto
 	char description[SIZE_DESCRIPTION];	// descricao do produto apenas para sanduiches
-	int is_available;					// 1 = disponivel, 0 = nao disponivel
+	unsigned is_available;				// 1 = disponivel, 0 = nao disponivel
 	double price[3];					// preco[0] = pequeno, preco[1] = medio, preco[2] = grande
 										// preco de produtos sem tamanho vao em preco[0]
 	int next;							// posicao do proximo no no arquivo
