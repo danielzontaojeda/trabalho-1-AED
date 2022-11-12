@@ -56,7 +56,6 @@ void print_order_menu(){
 }
 
 void press_enter_to_continue(){
-	fflush(stdin);
 	printf("Digite ENTER para continuar\n");
 	getchar();
 }

@@ -43,7 +43,6 @@ static char *get_description(const char *type){
 	char *description = malloc(SIZE_DESCRIPTION);
 	if(strcmp(type, "SD") == 0){
 		printf("Digite a descricao do produto.\n");
-		fflush(stdin);
 		fgets(description, SIZE_DESCRIPTION, stdin);
 		remove_new_line(description);
 	}
