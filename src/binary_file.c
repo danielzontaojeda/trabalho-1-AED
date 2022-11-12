@@ -35,10 +35,10 @@ int is_file_empty(FILE *database){
 }
 
 // Cria pasta 'database' se ela nao existir
-// Entrada: Nenhuma
-// Retorno: Nenhum
-// Pré-condições: Nenhuma
-// Pós-condições: Pasta 'database' criada
+// Entrada: nenhuma
+// Retorno: nenhum
+// Pré-condições: nenhuma
+// Pós-condições: pasta 'database' criada
 void create_database_directory(){
 	#ifdef __linux__
 		mkdir(DATABASE_FOLDER, 777); 
