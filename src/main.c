@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "input_file.h"
 #include "linked_list.h"
@@ -7,7 +8,7 @@
 #include "binary_file.h"
 #include "debug.h"
 
-enum choices {exit, sandwich, drink, dessert, extra, order, load_file};
+enum choices {quit, sandwich, drink, dessert, extra, order, load_file};
 
 LinkedList *load_from_file(char *filename){
 	LinkedList *commands_from_file = NULL;
@@ -23,7 +24,7 @@ void clear_linked_list(LinkedList *ll){
 int process_choice(enum choices choice){
 	int submenu_choice;
 	switch (choice){
-	case exit:
+	case quit:
 		break;
 	case sandwich:
 		print_sandwich_menu();
@@ -56,8 +57,10 @@ int process_choice(enum choices choice){
 		char *filename = get_filename();
 		commands =  load_from_file(filename);
 		list_product = create_product_from_file(commands);
-		free(filename);
 		write_product_list_to_file(list_product);
+		free(filename);
+		ll_delete(commands);
+		ll_delete(list_product);
 		press_enter_to_continue();
 		break;
 	}
