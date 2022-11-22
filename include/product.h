@@ -11,7 +11,7 @@
 #define SIZE_LINE (SIZE_NAME + SIZE_DESCRIPTION + 100)
 
 // significado das escolhas recebidas
-enum choice_enum {back, create, print};
+enum submenu_choice {back, create, print};
 
 // estrutura de no para os produtos
 typedef struct product{
@@ -44,7 +44,7 @@ Product *get_product_keyboard(const char *type);
 // Retorno: nenhum
 // Pré-condições: escolha valida de acordo com enum choices
 // Pós-condições: nenhum
-void process_submenu_choice(int choice, char *type);
+void process_submenu_choice(enum submenu_choice choice, char *type);
 
 // Cria entidade produto
 // Entrada: tipo do produto e seus valores

@@ -24,7 +24,7 @@ void create_header(FILE* database){
 		header->pos_free = EMPTY;
 		assert(fwrite(header, sizeof(Header), 1, database));
 		#ifdef __DEBUG
-			printf("DEBUG: Header written\n");
+			printf("DEBUG: New header written\n");
 		#endif
 	}else{
 		#ifdef __DEBUG

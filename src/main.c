@@ -20,7 +20,7 @@ void clear_linked_list(LinkedList *ll){
 	ll = NULL;
 }
 
-int process_choice(int choice){
+int process_choice(enum choices choice){
 	int submenu_choice;
 	switch (choice){
 	case exit:

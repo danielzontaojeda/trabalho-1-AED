@@ -241,7 +241,7 @@ LinkedList *create_product_from_file(LinkedList *ll){
 // Retorno: nenhum
 // Pré-condições: escolha valida de acordo com enum choices
 // Pós-condições: nenhum
-void process_submenu_choice(int choice, char *type){
+void process_submenu_choice(enum submenu_choice choice, char *type){
 	if(choice == create){
 		Product *product = NULL;
 		product = get_product_keyboard(type);
