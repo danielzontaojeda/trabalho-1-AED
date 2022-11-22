@@ -198,6 +198,21 @@ int is_type_of_product(const char *type){
 		!strcmp(type, "SM") || !strcmp(type, "EX"));
 }
 
+// Divide parametro de entrada string e coloca as informacoes nos ponteiros passados por parametro
+// Entrada: string de entrada e informacoes da struct product
+// Retorno: nenhum
+// Pré-condições: string e uma string de entrada valida
+// Pós-condições: todos os outros parametros recebem seus valores 
+static void parse_product_from_string(char *string, char *type, int *id, char *name,
+						char *description, char *is_available, char *price_str){
+	if(!strcmp(type, "SD"))
+		sscanf(string, "%[^;];%d;%[^;];%[^;];%c;%[^\n]%*c",
+			type, id, name, description, is_available, price_str);
+	else
+		sscanf(string, "%[^;];%d;%[^;];%c;%[^\n]%*c",
+			type, id, name,  is_available, price_str);
+}
+
 // Cria lista encadeada com produtos utilizando comandos de list_commands
 // Entrada: lista encadeada contendo os comandos do arquivo de entrada
 // Retorno: lista encadeada contendo produtos
@@ -216,12 +231,7 @@ LinkedList *create_product_from_file(LinkedList *ll){
 				char name[SIZE_NAME], description[SIZE_DESCRIPTION], price_str[SIZE_LINE];
 				char is_available;
 				double *price;
-				if(!strcmp(type, "SD"))
-					sscanf(list_commands->info, "%[^;];%d;%[^;];%[^;];%c;%[^\n]%*c",
-						type, &id, name, description, &is_available, price_str);
-				else
-					sscanf(list_commands->info, "%[^;];%d;%[^;];%c;%[^\n]%*c",
-						type, &id, name,  &is_available, price_str);
+				parse_product_from_string(list_commands->info, type, &id, name, description, &is_available, price_str);
 				is_available = is_available == 'D';
 				price = get_price_from_str(type, price_str);
 				product = create_product(type, id, name, description, is_available, price);
