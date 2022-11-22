@@ -53,8 +53,10 @@ int process_choice(enum choices choice){
 		;
 		LinkedList *commands = NULL;
 		LinkedList *list_product = NULL;
-		commands =  load_from_file("dados.txt");
+		char *filename = get_filename();
+		commands =  load_from_file(filename);
 		list_product = create_product_from_file(commands);
+		free(filename);
 		write_product_list_to_file(list_product);
 		press_enter_to_continue();
 		break;

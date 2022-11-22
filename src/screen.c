@@ -67,3 +67,10 @@ void clear_screen(){
 		system("cls");
 	#endif
 }
+
+char *get_filename(){
+	char *filename = malloc(sizeof(100));
+	printf("Digite o nome do arquivo.\n");
+	scanf("%[^\n]%*c",filename);
+	return filename;
+}

@@ -22,4 +22,6 @@ void clear_screen();
 
 void press_enter_to_continue();
 
+char *get_filename();
+
 #endif
