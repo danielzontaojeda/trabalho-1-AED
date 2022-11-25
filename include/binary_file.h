@@ -10,7 +10,10 @@
 #define DATABASE_FOLDER "./database"
 
 // nome do arquivo guardando os dados dos produtos cadastrados
-#define DATABASE_PRODUCT "product"
+#define DATABASE_SD	"sandwich"
+#define DATABASE_BB	"drink"
+#define DATABASE_EX	"extra"
+#define DATABASE_SM	"dessert"
 
 // Cabecalho para a funcao do sistema para criar uma pasta
 // Entrada: caminho da pasta para ser criada
@@ -54,14 +57,13 @@ void write_product_to_file(Product *product, FILE *database_product);
 // Pós-condições: inteiro booleano retornado 
 int is_file_empty(FILE *database);
 
-// Imprime em stdout todos os produtos do tipo type em database_product
+// Imprime em stdout todos os produtos em database_product
 // Entrada: ponteiro para o banco de dados de produtos
 //        	tipo do produto
 // Retorno: nenhum
-// Pré-condições: type e um tipo de produto valido
-//                database_product e um ponteiro valido
-// Pós-condições: todos os produtos do tipo type impressos em stdout 
-void print_all_products_in_file(FILE *database_product, char *type);
+// Pré-condições: database_product e um ponteiro valido
+// Pós-condições: todos os produtos do arquivo impressos em stdout 
+void print_all_products_in_file(FILE *database_product);
 
 // Retorna produto da posicao pos no arquivo database_product
 // Entrada: ponteiro para o arquivo de banco de dados dos produtos

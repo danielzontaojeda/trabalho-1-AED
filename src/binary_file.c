@@ -69,15 +69,14 @@ Product *read_node(FILE *database_product, int pos){
 // Pré-condições: type e um tipo de produto valido ou NULL
 //                database_product e um ponteiro valido
 // Pós-condições: todos os produtos do tipo type impressos em stdout 
-void print_all_products_in_file(FILE *database_product, char *type){
+void print_all_products_in_file(FILE *database_product){
 	assert(database_product);
 	Header *header = read_header(database_product);
 	Product *product = read_node(database_product, header->pos_head);
 	if(product == NULL) printf("Nenhum produto encontrado.\n");
 	while(product){
 		int next = product->next;
-		if(!strcmp(product->type, type) || type == NULL)
-			print_product(product);
+		print_product(product);
 		free(product);
 		product = read_node(database_product, next);
 	}
@@ -93,11 +92,25 @@ void write_product_list_to_file(LinkedList *list_products){
 	assert(list_products);
 	int size = 0;
 	create_database_directory();
-	FILE* database_product = get_database(DATABASE_PRODUCT);
+	FILE* database_sd = get_database(DATABASE_SD);
+	FILE* database_bb = get_database(DATABASE_BB);
+	FILE* database_ex = get_database(DATABASE_EX);
+	FILE* database_sm = get_database(DATABASE_SM);
 	LinkedList *ll = list_products;
-	create_header(database_product);
+	create_header(database_sd);
+	create_header(database_bb);
+	create_header(database_ex);
+	create_header(database_sm);
 	while(ll != NULL){
-		write_product_to_file(ll->info, database_product);
+		Product *product = ll->info;
+		if(!strcmp(product->type, "SD"))
+			write_product_to_file(ll->info, database_sd);
+		else if(!strcmp(product->type, "BB"))
+			write_product_to_file(ll->info, database_bb);
+		else if(!strcmp(product->type, "EX"))
+			write_product_to_file(ll->info, database_ex);
+		else if(!strcmp(product->type, "SM"))
+			write_product_to_file(ll->info, database_sm);
 		ll = ll->prox;
 		size++;
 	}
@@ -105,7 +118,10 @@ void write_product_list_to_file(LinkedList *list_products){
 		print_all_products_in_file(database_product, NULL);
 	#endif
 	printf("%d produtos adicionados ao banco de dados!\n", size);
-	fclose(database_product);
+	fclose(database_sd);
+	fclose(database_bb);
+	fclose(database_sm);
+	fclose(database_ex);
 }
 
 // Coloca product em database_product
