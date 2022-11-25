@@ -5,7 +5,6 @@
 #include <assert.h>
 
 #include "binary_file.h"
-#include "debug.h"
 #include "header.h"
 
 // Cria stream para database_name localizado na pasta DATABASE_FOLDER

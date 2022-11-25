@@ -4,7 +4,6 @@
 #include <assert.h>
 
 #include "header.h"
-#include "debug.h"
 #include "binary_file.h"
 
 // Cria, inicializa e grava um cabecalho em database caso

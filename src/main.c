@@ -6,7 +6,6 @@
 #include "screen.h"
 #include "product.h"
 #include "binary_file.h"
-#include "debug.h"
 
 enum choices {quit, sandwich, drink, dessert, extra, order, load_file};
 

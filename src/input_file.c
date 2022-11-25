@@ -4,7 +4,6 @@
 #include <assert.h>
 
 #include "input_file.h"
-#include "debug.h"
 
 #define SIZE_LINE sizeof(char)*500
 
