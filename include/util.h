@@ -15,4 +15,5 @@ void replace_char(char *string, char oldchar, char newchar);
 // Pós-condições: \n removido do final da string
 void remove_new_line(char *buffer);
 
+void remove_whitespace(char *dest, char *src);
 #endif

@@ -6,6 +6,7 @@
 #include "screen.h"
 #include "product.h"
 #include "binary_file.h"
+#include "order.h"
 
 enum choices {quit, sandwich, drink, dessert, extra, order, load_file};
 
@@ -53,9 +54,11 @@ int process_choice(enum choices choice){
 		;
 		LinkedList *commands = NULL;
 		LinkedList *list_product = NULL;
+		LinkedList *list_order = NULL;
 		char *filename = get_filename();
 		commands =  load_from_file(filename);
 		list_product = create_product_from_file(commands);
+		list_order = create_order_from_file(commands);
 		write_product_list_to_file(list_product);
 		free(filename);
 		ll_delete(commands);

@@ -10,7 +10,7 @@ typedef struct {
 	unsigned quantity;
 	enum size size;
 	int next;
-} Order_itens;
+} Order_items;
 
 typedef struct order{
 	char cpf[12];
@@ -29,5 +29,7 @@ void print_order(Order *order);
 void print_all_orders();
 
 int remove_order(char *cpf);
+
+void print_item_order(Order_items *item);
 
 #endif

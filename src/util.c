@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "util.h"
+#include "ctype.h"
 
 // Substitui primeira ocorrencia de oldchar por newchar
 // Entrada: string a ser alterada, oldchar e newchar
@@ -20,4 +21,15 @@ void replace_char(char *string, char oldchar, char newchar){
 // Pós-condições: \n removido do final da string
 void remove_new_line(char *string){
 	string[strcspn(string, "\n")] = 0;
+}
+
+void remove_whitespace(char *dest, char *src){
+	int j = 0;
+	for(int i=0;src[i] != '\0';i++){
+		if(!isspace(src[i])){
+			dest[j] = src[i];
+			j++;
+		}
+	}
+	dest[j] = '\0';
 }

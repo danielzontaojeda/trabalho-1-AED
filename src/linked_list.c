@@ -47,7 +47,7 @@ void ll_print(LinkedList *l){
 		printf("\n");
 		return;
 	}
-	printf("%s\n",l->info);
+	printf("%s\n",(TYPE_VAR)l->info);
 	ll_print(l->prox);
 }
 
