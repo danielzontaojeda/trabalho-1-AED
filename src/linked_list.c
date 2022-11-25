@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "linked_list.h"
+#include "product.h"
 
 int ll_is_empty(LinkedList *l){
 	return l == NULL;
@@ -46,7 +47,7 @@ void ll_print(LinkedList *l){
 		printf("\n");
 		return;
 	}
-	printf("%s",((TYPE_VAR)l->info));
+	printf("%s\n",l->info);
 	ll_print(l->prox);
 }
 

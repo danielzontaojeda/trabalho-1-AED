@@ -18,6 +18,8 @@ typedef struct order{
 	double price_total;
 } Order;
 
+LinkedList *create_order_from_file(LinkedList *commands);
+
 Order *create_new_order(char *cpf);
 
 Order *get_latest_3_orders(char *cpf);
