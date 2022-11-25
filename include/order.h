@@ -2,9 +2,18 @@
 #define __ORDER_H
 
 #include "linked_list.h"
+#include "product.h"
+
+typedef struct {
+	char type[3];
+	unsigned id;
+	unsigned quantity;
+	enum size size;
+	int next;
+} Order_itens;
 
 typedef struct order{
-	char cpf[11];
+	char cpf[12];
 	LinkedList* list_products;
 	double price_total;
 } Order;

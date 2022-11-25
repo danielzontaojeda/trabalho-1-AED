@@ -13,6 +13,8 @@
 // significado das escolhas recebidas
 enum submenu_choice {back, create, print};
 
+enum size {small, medium, large};
+
 // estrutura de no para os produtos
 typedef struct product{
 	char type[3]; 						// tipo do produto (SD, BB, EX, SM ou PD)
