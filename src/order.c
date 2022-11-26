@@ -18,7 +18,7 @@ static char *get_size_str(enum size size){
 
 void print_item_order(Order_items *item){
 	printf("tipo: %-9s\t ",get_product_type_name(item->type));
-	printf("id: %3u\t ",item->id_product);
+	printf("id: %-3u\t ",item->id_product);
 	printf("quantidade: %3u\t ",item->quantity);
 	if(!strcmp(item->type, "SD") || !strcmp(item->type, "BB"))
 		printf("tamanho: %s", get_size_str(item->size));

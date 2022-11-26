@@ -60,6 +60,7 @@ int process_choice(enum choices choice){
 		list_product = create_product_from_file(commands);
 		list_order = create_order_from_file(commands);
 		write_product_list_to_file(list_product);
+		write_order_list_to_file(list_order);
 		free(filename);
 		ll_delete(commands);
 		ll_delete(list_product);

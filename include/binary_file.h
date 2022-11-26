@@ -10,10 +10,12 @@
 #define DATABASE_FOLDER "./database"
 
 // nome do arquivo guardando os dados dos produtos cadastrados
-#define DATABASE_SD	"sandwich"
-#define DATABASE_BB	"drink"
-#define DATABASE_EX	"extra"
-#define DATABASE_SM	"dessert"
+#define DATABASE_SD			"sandwich"
+#define DATABASE_BB			"drink"
+#define DATABASE_EX			"extra"
+#define DATABASE_SM			"dessert"
+#define DATABASE_PD 		"order"
+#define DATABASE_ITEM_PD 	"item_pd"
 
 // Cabecalho para a funcao do sistema para criar uma pasta
 // Entrada: caminho da pasta para ser criada
@@ -73,4 +75,5 @@ void print_all_products_in_file(FILE *database_product);
 // Pós-condições: estrutura do produto retornada
 Product *read_node(FILE *database_product, int pos);
 
+void write_order_list_to_file(LinkedList *list_order);
 #endif

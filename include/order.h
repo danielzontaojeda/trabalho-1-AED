@@ -12,11 +12,21 @@ typedef struct {
 	int next;
 } Order_items;
 
+typedef struct{
+	unsigned id;
+	char type[3];
+	char cpf[12];
+	int head_item;
+	int next;
+	double price_total;
+} Order_file;
+
 typedef struct order{
 	unsigned id;
 	char type[3];
 	char cpf[12];
 	LinkedList* list_products;
+	int next;
 	double price_total;
 } Order;
 

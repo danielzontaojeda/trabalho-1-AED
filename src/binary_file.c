@@ -6,6 +6,7 @@
 
 #include "binary_file.h"
 #include "header.h"
+#include "order.h"
 
 // Cria stream para database_name localizado na pasta DATABASE_FOLDER
 // Entrada: nenhuma
@@ -159,4 +160,80 @@ void write_product_to_file(Product *product, FILE *database_product){
 		printf("DEBUG: write_product_to_file -> product.name = %s, product.id = %d\n",product->name, product->id);		
 	#endif
 	insert_product(product, database_product);
+}
+
+static int insert_items_order(FILE *database_item_order, LinkedList *list_items){
+	Header *header = read_header(database_item_order);
+	assert(header);
+	#ifdef __DEBUG
+		printf("header: head: %d top: %d free: %d\n",header->pos_head, header->pos_top, header->pos_free);
+	#endif
+	LinkedList *ll = list_items;
+	Order_items *item = list_items->info;
+	item->next = -1;
+	while(ll != NULL){
+		if(header->pos_free == EMPTY){
+			fseek(database_item_order, sizeof(Header) + header->pos_top*sizeof(Order_items), SEEK_SET);
+			fwrite(item, sizeof(Order_items), 1, database_item_order);
+			#ifdef __DEBUG
+				printf("written pos: %d, next: %d\n",header->pos_top, item->next);
+			#endif
+			header->pos_head = header->pos_top;
+			header->pos_top += 1;
+			fseek(database_item_order, 0, SEEK_SET);
+			fwrite(header, sizeof(Header), 1, database_item_order);
+			ll = ll->prox;
+			if(ll != NULL){
+				item = ll->info;
+				item->next = header->pos_head;
+			}
+		}else{
+			// TODO
+		}
+	}
+	int head = header->pos_head;
+	free(header);
+	return head;
+}
+
+static Order_file *create_order(Order *order){
+	Order_file *order_file = calloc(1, sizeof(Order_file));
+	order_file->id = order->id;
+	order_file->head_item = -1;
+	strcpy(order_file->cpf, order->cpf);
+	strcpy(order_file->type, order->type);
+	order_file->price_total = order->price_total;	
+	return order_file;
+}
+
+void write_order_to_file(FILE *database_order, FILE *database_item_order, Order *order){
+	Header *header = read_header(database_order);
+	assert(header);
+	Order_file *order_file = create_order(order);
+	order_file->head_item = insert_items_order(database_item_order, order->list_products);
+	if(header->pos_free == EMPTY){
+		order_file->next = header->pos_head;
+		fseek(database_order, sizeof(Header) + header->pos_top*sizeof(Order_file), SEEK_SET);
+		fwrite(order_file, sizeof(Order_file), 1, database_order);
+		printf("pos: %d next: %d\n",header->pos_top, header->pos_head);
+		header->pos_head = header->pos_top;
+		header->pos_top += 1;
+		fseek(database_order, 0, SEEK_SET);
+		fwrite(header, sizeof(Header), 1, database_order);
+	}
+}
+
+void write_order_list_to_file(LinkedList *list_order){
+	assert(list_order);
+	FILE *database_order = get_database(DATABASE_PD);
+	FILE *database_item_order = get_database(DATABASE_ITEM_PD);
+	create_header(database_order);
+	create_header(database_item_order);
+	LinkedList *ll = list_order;
+	while(ll != NULL){
+		write_order_to_file(database_order, database_item_order, ll->info);
+		ll = ll->prox;
+	}
+	fclose(database_order);
+	fclose(database_item_order);
 }
