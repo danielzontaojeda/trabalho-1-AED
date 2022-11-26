@@ -74,3 +74,8 @@ char *get_filename(){
 	scanf("%[^\n]%*c",filename);
 	return filename;
 }
+
+void print_separator(){
+	for(int i=0;i<100;i++) printf("=");
+	printf("\n");
+}

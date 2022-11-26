@@ -16,4 +16,5 @@ void replace_char(char *string, char oldchar, char newchar);
 void remove_new_line(char *buffer);
 
 void remove_whitespace(char *dest, char *src);
+
 #endif

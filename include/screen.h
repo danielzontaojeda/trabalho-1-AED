@@ -24,4 +24,6 @@ void press_enter_to_continue();
 
 char *get_filename();
 
+void print_separator();
+
 #endif

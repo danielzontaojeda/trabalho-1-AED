@@ -6,13 +6,15 @@
 
 typedef struct {
 	char type[3];
-	unsigned id;
+	unsigned id_product;
 	unsigned quantity;
 	enum size size;
 	int next;
 } Order_items;
 
 typedef struct order{
+	unsigned id;
+	char type[3];
 	char cpf[12];
 	LinkedList* list_products;
 	double price_total;
