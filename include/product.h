@@ -78,4 +78,6 @@ int is_type_of_product(const char *type);
 // Pós-condições: nome inteiro do tipo do produto retornado
 char *get_product_type_name(const char *type);
 
+Product *find_product(char *type, int id);
+
 #endif

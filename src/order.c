@@ -19,12 +19,18 @@ static char *get_size_str(enum size size){
 }
 
 void print_item_order(Order_items *item){
-	printf("tipo: %-9s\t ",get_product_type_name(item->type));
-	printf("id: %-3u\t ",item->id_product);
-	printf("quantidade: %3u\t ",item->quantity);
-	if(!strcmp(item->type, "SD") || !strcmp(item->type, "BB"))
-		printf("tamanho: %s", get_size_str(item->size));
-	printf("\n");
+	Product *product = find_product(item->type, item->id_product);
+	if(product != NULL){
+		printf("tipo: %-9s\t ",get_product_type_name(item->type));
+		printf("id: %-3u\t ",item->id_product);
+		printf("quantidade: %3u\t ",item->quantity);
+		printf("nome: %s ",product->name);
+		if(!strcmp(item->type, "SD") || !strcmp(item->type, "BB"))
+			printf("tamanho: %s", get_size_str(item->size));
+		printf("\n");
+	}else{
+		printf("Produto de id %d nao encontrado.\n",item->id_product);
+	}
 }
 
 static enum size set_item_size(char size_str){
@@ -115,10 +121,12 @@ void process_submenu_order(enum choice_order choice){
 		Order *order = get_order_from_keyboard();
 		FILE *database_order = get_database(DATABASE_PD);
 		FILE *database_item_order = get_database(DATABASE_ITEM_PD);
-		print_order(order);
 		create_header_queue(database_order);
 		create_header(database_item_order);
 		write_order_to_file(database_order, database_item_order, order);
+		clear_screen();
+		printf("Novo pedido adicionado: \n");
+		print_order(order);
 		fclose(database_order);
 		fclose(database_item_order);
 		free(order);

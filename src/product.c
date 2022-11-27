@@ -246,6 +246,29 @@ LinkedList *create_product_from_file(LinkedList *ll){
 	return list_products;
 }
 
+Product *find_product(char *type, int id){
+	FILE *database;
+	if(!strcmp(type, "SD")) database = get_database(DATABASE_SD);
+	else if(!strcmp(type, "BB")) database = get_database(DATABASE_BB);
+	else if(!strcmp(type, "EX")) database = get_database(DATABASE_EX);
+	else if(!strcmp(type, "SM")) database = get_database(DATABASE_SM);
+	Header *header = read_header(database);
+	Product *product = read_node(database, header->pos_head);
+	while(product){
+		int next = product->next;
+		if(product->id == id){
+			free(header);
+			fclose(database);
+			return product;
+		}
+		free(product);
+		product = read_node(database, next);
+	}
+	free(header);
+	fclose(database);
+	return NULL;
+}
+
 static FILE *get_database_product(char *type){
 	FILE *database_product = NULL;
 	if(!strcmp(type, "SD"))
