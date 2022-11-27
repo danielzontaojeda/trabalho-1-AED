@@ -79,4 +79,6 @@ Product *read_node(FILE *database_product, int pos);
 void write_order_list_to_file(LinkedList *list_order);
 
 void write_order_to_file(FILE *database_order, FILE *database_item_order, Order *order);
+
+Order_file *seek_order(FILE *database, int pos);
 #endif

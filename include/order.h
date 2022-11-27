@@ -4,7 +4,7 @@
 #include "linked_list.h"
 #include "product.h"
 
-enum choice_order {create_enum=1, search_order, print_fulfilled, fulfill_next};
+enum choice_order {create_enum=1, search_order, print_fulfilled, fulfill_next, delete_order};
 
 typedef struct {
 	char type[3];

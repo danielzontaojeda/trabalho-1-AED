@@ -114,11 +114,62 @@ static Order *get_order_from_keyboard(){
 	return order;
 }
 
+static LinkedList *get_item_list_from_file(FILE *database, int head){
+	int item_pos = head;
+	LinkedList *list_items = NULL;
+	while(item_pos != EMPTY){
+		Order_items *item = calloc(1, sizeof(Order_items));
+		fseek(database, sizeof(Header) + item_pos*sizeof(Order_items), SEEK_SET);
+		fread(item, sizeof(Order_items), 1, database);
+		list_items = ll_insert(list_items, item);
+		item_pos = item->next;
+	}
+	return list_items;
+}
+
+static Order *convert_order(Order_file *order_file){
+	if(order_file == NULL) return NULL;
+	FILE *database_items = get_database(DATABASE_ITEM_PD);
+	Order *order = calloc(1, sizeof(Order));
+	order->id = order_file->id;
+	strcpy(order->type, order_file->type);
+	strcpy(order->cpf, order_file->cpf);
+	order->price_total =  order_file->price_total;
+	order->list_products = get_item_list_from_file(database_items, order_file->head_item);
+	fclose(database_items);
+	return order;
+}
+
+Order *find_order(unsigned id){
+	FILE *database = get_database(DATABASE_PD);
+	Header_queue *header = read_header_queue(database);
+	Order_file *order_file = seek_order(database, header->pos_tail);
+	Order *order = convert_order(order_file);
+	while(order != NULL){
+		if(order->id == id){
+			free(header);
+			fclose(database);
+			free(order_file);
+			return order;
+		}
+		int next = order->next;
+		free(order);
+		free(order_file);
+		order_file = seek_order(database, next);
+		order = convert_order(order_file);
+	}
+	free(header);
+	free(order_file);
+	fclose(database);
+	return NULL;
+}
+
 void process_submenu_order(enum choice_order choice){
+	Order *order;
 	switch (choice){
 	case create_enum:
 		;
-		Order *order = get_order_from_keyboard();
+		order = get_order_from_keyboard();
 		FILE *database_order = get_database(DATABASE_PD);
 		FILE *database_item_order = get_database(DATABASE_ITEM_PD);
 		create_header_queue(database_order);
@@ -133,13 +184,24 @@ void process_submenu_order(enum choice_order choice){
 		press_enter_to_continue();
 		break;
 	case search_order:
+		;
+		unsigned id;
 		printf("Digite o id do pedido.\n");
-
+		scanf("%u%*c",&id);
+		clear_screen();
+		order = find_order(id);
+		if(order) print_order(order);
+		else printf("Pedido nao encontrado.\n");
+		ll_delete(order->list_products);
+		free(order);
+		press_enter_to_continue();
 		break;
 	case print_fulfilled:
 		break;
 	case fulfill_next:
 		break;	
+	case delete_order:
+		break;
 	default:
 		break;
 	}
