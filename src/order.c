@@ -215,6 +215,12 @@ Order *find_order(unsigned id){
 		order_file = seek_order(database, next);
 		order = convert_order(order_file);
 	}
+	if(order->id == id){
+		free(header);
+		fclose(database);
+		free(order_file);
+		return order;
+	}
 	free(header);
 	free(order_file);
 	free(order);
@@ -230,6 +236,8 @@ static void add_empty_position_to_header(FILE *database, Header_queue *header, i
 	}else{
 		Order_file *order = seek_order(database, header->pos_free);
 		int next = order->next;
+		printf("pos %d\n",pos);
+		printf("next %d\n",next);
 		while(next != EMPTY){
 			free(order);
 			order = seek_order(database, next);
@@ -263,9 +271,8 @@ static void delete_order_position(FILE *database, int pos){
 		order = seek_order(database, header->pos_head);
 		order->next = EMPTY;
 		// cabeca da fila aponta para -1
-		fseek(database, sizeof(Header) + actual*sizeof(Order_file), SEEK_SET);
+		fseek(database, sizeof(Header_queue) + actual*sizeof(Order_file), SEEK_SET);
 		fwrite(order, sizeof(Order_file), 1, database);
-		printf("delete: pos %d next %d\n",header->pos_head, order->next);
 		free(order);
 		add_empty_position_to_header(database, header, actual);
 	}else{
@@ -309,14 +316,14 @@ static int remove_next_order(){
 	FILE *database = get_database(DATABASE_PD);
 	Header_queue *header = read_header_queue(database);
 	int pos = header->pos_head;
+	free(header);
 	Order_file *order_file = seek_order(database, pos);
 	Order *order = convert_order(order_file);
+	delete_order_position(database, pos);
 	printf("Pedido atendido: \n");
 	print_order(order);
-	delete_order_position(database, pos);
 	free(order);
 	free(order_file);
-	free(header);
 	fclose(database);
 	return pos;
 }
@@ -335,6 +342,9 @@ void print_order_queue(){
 		order_file = seek_order(database, next);
 		order = convert_order(order_file);
 	}
+	print_order(order);
+	free(order_file);
+	free(order);
 }
 
 // Processa a escolha do usuario no menu de pedidos
@@ -369,7 +379,11 @@ void process_submenu_order(enum choice_order choice){
 		clear_screen();
 		order = find_order(id);
 		if(order) print_order(order);
-		else printf("Pedido nao encontrado.\n");
+		else{
+			printf("Pedido nao encontrado.\n");
+			press_enter_to_continue();
+			break;
+		}
 		ll_delete(order->list_products);
 		free(order);
 		press_enter_to_continue();
