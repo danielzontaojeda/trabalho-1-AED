@@ -14,6 +14,13 @@ typedef struct header{
 	int pos_free;	// cabeca da lista de posicoes vazias
 } Header;
 
+typedef struct header_queue{
+	int pos_head;
+	int pos_top;
+	int pos_free;
+	int pos_tail;
+} Header_queue;
+
 // Caso database esteja vazia, retorna NULL
 // caso contrario, retorna seu cabecalho
 // Entrada: ponteiro para banco de dados
@@ -31,4 +38,8 @@ Header *read_header(FILE *database);
 // 				  ele ainda nao tenha um cabecalho
 void create_header(FILE* database);
 
+
+Header_queue *read_header_queue(FILE *database);
+
+void create_header_queue(FILE* database);
 #endif

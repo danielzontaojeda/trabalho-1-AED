@@ -52,6 +52,7 @@ void print_order_menu(){
 	printf("1 - Novo pedido\n");
 	printf("2 - Buscar pedido\n");
 	printf("3 - Imprimir pedidos atendidos\n");
+	printf("4 - Atender proximo pedido\n");
 	printf("0 - Voltar\n");
 }
 
