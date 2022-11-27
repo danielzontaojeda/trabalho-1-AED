@@ -5,7 +5,7 @@
 #include "product.h"
 
 // enum de escolhas do usuario
-enum choice_order {create_enum=1, search_order, print_fulfilled, fulfill_next, delete_order};
+enum choice_order {exit_order, create_enum, search_order, print_fulfilled, fulfill_next, print_queue};
 
 // estrutura de no de arquivo para itens de um pedido
 typedef struct {

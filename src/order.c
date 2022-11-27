@@ -90,6 +90,7 @@ void print_order(Order *order){
 	printf("tipo: %s\n",order->type);
 	printf("id: %u\n",order->id);
 	printf("cpf: %s\n",order->cpf);
+	printf("next: %d\n",order->next);
 	printf("pedido: \n");
 	LinkedList *actual = order->list_products;
 	while(actual != NULL){
@@ -185,6 +186,7 @@ static Order *convert_order(Order_file *order_file){
 	strcpy(order->cpf, order_file->cpf);
 	order->price_total =  order_file->price_total;
 	order->list_products = get_item_list_from_file(database_items, order_file->head_item);
+	order->next = order_file->next;
 	fclose(database_items);
 	return order;
 }
@@ -199,14 +201,15 @@ Order *find_order(unsigned id){
 	Header_queue *header = read_header_queue(database);
 	Order_file *order_file = seek_order(database, header->pos_tail);
 	Order *order = convert_order(order_file);
-	while(order != NULL){
+	int next;
+	while(order_file->next != EMPTY){
 		if(order->id == id){
 			free(header);
 			fclose(database);
 			free(order_file);
 			return order;
 		}
-		int next = order->next;
+		next = order_file->next;
 		free(order);
 		free(order_file);
 		order_file = seek_order(database, next);
@@ -214,8 +217,124 @@ Order *find_order(unsigned id){
 	}
 	free(header);
 	free(order_file);
+	free(order);
 	fclose(database);
 	return NULL;
+}
+
+static void add_empty_position_to_header(FILE *database, Header_queue *header, int pos){
+	if(header->pos_free == EMPTY){
+		header->pos_free = pos;
+		fseek(database, 0, SEEK_SET);
+		fwrite(header, sizeof(Header), 1, database);
+	}else{
+		Order_file *order = seek_order(database, header->pos_free);
+		int next = order->next;
+		while(next != EMPTY){
+			free(order);
+			order = seek_order(database, next);
+			next = order->next;
+		}
+		order->next = pos;
+		fseek(database, sizeof(Header) + next*sizeof(Order_file), SEEK_SET);
+		fwrite(order, sizeof(Order_file), 1, database);
+		free(order);
+	}
+}
+
+
+static void delete_order_position(FILE *database, int pos){
+	Header_queue *header = read_header_queue(database);
+	int actual;
+	if(header->pos_head == pos){
+		// caso item seja primeiro da lista
+		Order_file *order = seek_order(database, header->pos_head);
+		int next = order->next;
+		actual = header->pos_head;
+		header->pos_head = next;
+		// atualiza cabeca da fila
+		fseek(database, 0, SEEK_SET);
+		fwrite(header, sizeof(Header_queue), 1, database);
+		order->next = EMPTY;
+		// proximo do pedido deletado para -1
+		fseek(database, sizeof(Header) + actual*sizeof(Order_file), SEEK_SET);
+		fwrite(order, sizeof(Order_file), 1, database);
+		free(order);
+		order = seek_order(database, header->pos_head);
+		order->next = EMPTY;
+		// cabeca da fila aponta para -1
+		fseek(database, sizeof(Header) + actual*sizeof(Order_file), SEEK_SET);
+		fwrite(order, sizeof(Order_file), 1, database);
+		printf("delete: pos %d next %d\n",header->pos_head, order->next);
+		free(order);
+		add_empty_position_to_header(database, header, actual);
+	}else{
+		Order_file *order = seek_order(database, header->pos_tail);
+		while(order->next != pos){
+			actual = order->next;
+			free(order);
+			order = seek_order(database, actual);
+		}
+		int next = order->next;
+		free(order);
+		order = seek_order(database, next);
+		next = order->next;
+		free(order);
+		if(next != EMPTY){
+			// caso item nao seja ultimo da lista
+			order = seek_order(database, next);
+			order->next = actual;
+			fseek(database, sizeof(Header_queue) + next*sizeof(Order_file), SEEK_SET);
+			fwrite(order, sizeof(Order_file), 1, database);
+			free(order);
+		}else{
+			// caso item a deletar seja ultimo da lista
+			order = seek_order(database, actual);
+			order->next = EMPTY;
+			fseek(database, sizeof(Header_queue) + next*sizeof(Order_file), SEEK_SET);
+			fwrite(order, sizeof(Order_file), 1, database);
+			free(order);
+		}
+		order = seek_order(database, actual);
+		next = order->next;
+		free(order);
+		order = seek_order(database, next);
+		order->next = EMPTY;
+		add_empty_position_to_header(database, header, next);
+	}
+	free(header);
+}
+
+static int remove_next_order(){
+	FILE *database = get_database(DATABASE_PD);
+	Header_queue *header = read_header_queue(database);
+	int pos = header->pos_head;
+	Order_file *order_file = seek_order(database, pos);
+	Order *order = convert_order(order_file);
+	printf("Pedido atendido: \n");
+	print_order(order);
+	delete_order_position(database, pos);
+	free(order);
+	free(order_file);
+	free(header);
+	fclose(database);
+	return pos;
+}
+
+void print_order_queue(){
+	FILE *database = get_database(DATABASE_PD);
+	Header_queue *header = read_header_queue(database);
+	Order_file *order_file = seek_order(database, header->pos_head);
+	Order *order = convert_order(order_file);
+	if(order == NULL) printf("Nao ha pedidos na fila.\n");
+	while(order->next != EMPTY){
+		print_order(order);
+		int next = order_file->next;
+		free(order_file);
+		free(order);
+		order_file = seek_order(database, next);
+		order = convert_order(order_file);
+	}
 }
 
 // Processa a escolha do usuario no menu de pedidos
@@ -258,9 +377,12 @@ void process_submenu_order(enum choice_order choice){
 	case print_fulfilled:
 		break;
 	case fulfill_next:
-		break;	
-	case delete_order:
+		remove_next_order();
+		press_enter_to_continue();
 		break;
+	case print_queue:
+		print_order_queue();
+		press_enter_to_continue();
 	default:
 		break;
 	}
