@@ -11,6 +11,11 @@
 #include "binary_file.h"
 #include "header.h"
 
+// Retorna string com tamanho do item escrito por extenso
+// Entrada: enum representando tamanho do pedido
+// Retorno: String com tamanho do item escrito por extenso
+// Pré-condições: size e um valor valido de enum size
+// Pós-condições: string retornada
 static char *get_size_str(enum size size){
 	if(size == small) return "pequeno";
 	if(size == medium) return "medio";
@@ -18,6 +23,11 @@ static char *get_size_str(enum size size){
 	return "";
 }
 
+// Escreve em stdout as informacoes de um item de pedido
+// Entrada: Estrutura de item de pedido
+// Retorno: Nenhum
+// Pré-condições: Arquivo de itens de pedido existe
+// Pós-condições: Informacoes do item do pedido impressas em stdout
 void print_item_order(Order_items *item){
 	Product *product = find_product(item->type, item->id_product);
 	if(product != NULL){
@@ -33,6 +43,11 @@ void print_item_order(Order_items *item){
 	}
 }
 
+// Recebe char representando tamanho e retorna enum representando tamanho
+// Entrada: char p, m ou g maiusculos ou minusculos
+// Retorno: enum size de tamanho do item
+// Pré-condições: size_str deve ser um caractere valido de tamanho de item
+// Pós-condições: Valor de enum size retornado
 static enum size set_item_size(char size_str){
 	if(size_str == 'p' || size_str == 'P') return small;
 	if(size_str == 'm' || size_str == 'M') return medium;
@@ -42,6 +57,12 @@ static enum size set_item_size(char size_str){
 	return -1;
 }
 
+// Recebe uma string do tipo (tipo, id, quantidade, tamanho?) e insere estas
+// informacoes em uma lista encadeada dentro da estrutura Order
+// Entrada: Estrutura de pedido e string com item do pedido
+// Retorno: Nenhum
+// Pré-condições: String de item de pedido deve ter valores validos
+// Pós-condições: Estrutura encadeada de Order_items inserida em order
 static void parse_item_string(Order *order, char *item_order){
 	char *token = strtok(item_order, ";");
 	char size_str;
@@ -59,6 +80,11 @@ static void parse_item_string(Order *order, char *item_order){
 	}
 }
 
+// Imprime em stdout as informacoes de um pedido, incluindo seus itens
+// Entrada: Estrutura de pedido
+// Retorno: Nenhum
+// Pré-condições: Estrutura de pedido valida
+// Pós-condições: Informacoes de pedido impressas em stdout
 void print_order(Order *order){
 	print_separator();
 	printf("tipo: %s\n",order->type);
@@ -74,7 +100,15 @@ void print_order(Order *order){
 	print_separator();
 }
 
+
+// Recebe lista encadeada com strings como informacao. As strings tem formato do tipo:
 // PD;1;11111111111;(SD,1,2,M);(SD,2,1,P);(BB,2,3,M);(EX,3,4);(SM,2,2)
+// estas informacoes sao separadas, estruturas de Order sao criadas e uma lista encadeada
+// destas estruturas e retornada
+// Entrada: Lista encadeada com string como informacao
+// Retorno: Lista encadeada com estruturas de pedido
+// Pré-condições: commands deve ter formato valido
+// Pós-condições: Lista encadeada alocada dinamicamente, e cada lista tem uma estrutura Order tambem alocada dinamicamente
 LinkedList *create_order_from_file(LinkedList *commands){
 	assert(commands);
 	char type[3], cpf[12], item_order[SIZE_LINE];
@@ -99,6 +133,11 @@ LinkedList *create_order_from_file(LinkedList *commands){
 	return list_order;
 }
 
+// Executa fluxo de programa para pegar as informacoes de um pedido por stdin
+// Entrada: Nenhuma
+// Retorno: Estrutura de pedido
+// Pré-condições: cpf digitado deve ter 11 digitos, item do pedido digitado deve ter formato correto
+// Pós-condições: Estrutura de pedido alocada dinamicamente e retornada
 static Order *get_order_from_keyboard(){
 	clear_screen();
 	Order *order = calloc(1, sizeof(Order));
@@ -114,6 +153,11 @@ static Order *get_order_from_keyboard(){
 	return order;
 }
 
+// Cria lista encadeada de itens de um pedido
+// Entrada: Ponteiro para arquivo de itens de pedido e posicao da cabeca da lista de itens
+// Retorno: Lista encadeada com estruturas de Order_items
+// Pré-condições: deve existir item do pedido na posicao head
+// Pós-condições: Lista encadeada e estruturas de Order_item alocadas dinamicamente
 static LinkedList *get_item_list_from_file(FILE *database, int head){
 	int item_pos = head;
 	LinkedList *list_items = NULL;
@@ -127,6 +171,11 @@ static LinkedList *get_item_list_from_file(FILE *database, int head){
 	return list_items;
 }
 
+// Converte uma estrutura Order_file para Order
+// Entrada: Estrutura de Order_file
+// Retorno: Estrutura Order
+// Pré-condições: Nenhuma
+// Pós-condições: Estrutura Order alocada dinamicamente
 static Order *convert_order(Order_file *order_file){
 	if(order_file == NULL) return NULL;
 	FILE *database_items = get_database(DATABASE_ITEM_PD);
@@ -140,6 +189,11 @@ static Order *convert_order(Order_file *order_file){
 	return order;
 }
 
+// Retorna estrutura de Order com id passado por parametro. Retorna NULL caso nao encontre
+// Entrada: id do pedido
+// Retorno: Estrtura de pedido
+// Pré-condições: Nenhuma
+// Pós-condições: Estrutura Order alocada dinamicamente
 Order *find_order(unsigned id){
 	FILE *database = get_database(DATABASE_PD);
 	Header_queue *header = read_header_queue(database);
@@ -164,6 +218,11 @@ Order *find_order(unsigned id){
 	return NULL;
 }
 
+// Processa a escolha do usuario no menu de pedidos
+// Entrada: enum com escolha do usuario
+// Retorno: Nenhum
+// Pré-condições: escolha do usuario corresponde a um valor de enum
+// Pós-condições: Fluxo de programa para a escolha do usuario executada
 void process_submenu_order(enum choice_order choice){
 	Order *order;
 	switch (choice){
