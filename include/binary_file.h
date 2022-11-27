@@ -5,6 +5,7 @@
 
 #include "linked_list.h"
 #include "product.h"
+#include "order.h"
 
 // nome da pasta onde ficarao os banco de dados
 #define DATABASE_FOLDER "./database"
@@ -76,4 +77,6 @@ void print_all_products_in_file(FILE *database_product);
 Product *read_node(FILE *database_product, int pos);
 
 void write_order_list_to_file(LinkedList *list_order);
+
+void write_order_to_file(FILE *database_order, FILE *database_item_order, Order *order);
 #endif

@@ -4,6 +4,8 @@
 #include "linked_list.h"
 #include "product.h"
 
+enum choice_order {create_enum=1, search_order, print_fulfilled, fulfill_next};
+
 typedef struct {
 	char type[3];
 	unsigned id_product;
@@ -43,5 +45,7 @@ void print_all_orders();
 int remove_order(char *cpf);
 
 void print_item_order(Order_items *item);
+
+void process_submenu_order(enum choice_order choice);
 
 #endif

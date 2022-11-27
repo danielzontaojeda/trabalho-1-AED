@@ -49,6 +49,7 @@ int process_choice(enum choices choice){
 	case order:
 		print_order_menu();
 		scanf("%d%*c",&submenu_choice);
+		process_submenu_order(submenu_choice);
 		break;
 	case load_file:
 		;

@@ -8,6 +8,8 @@
 #include "product.h"
 #include "debug.h"
 #include "screen.h"
+#include "binary_file.h"
+#include "header.h"
 
 static char *get_size_str(enum size size){
 	if(size == small) return "pequeno";
@@ -89,4 +91,48 @@ LinkedList *create_order_from_file(LinkedList *commands){
 		command = command->prox;
 	}
 	return list_order;
+}
+
+static Order *get_order_from_keyboard(){
+	clear_screen();
+	Order *order = calloc(1, sizeof(Order));
+	char order_items[SIZE_LINE];
+	strcpy(order->type, "PD");
+	printf("Digite o id do pedido.\n");
+	scanf("%u%*c",&order->id);
+	printf("Digite o cpf do cliente. (11 digitos sem pontuacao)\n");
+	fgets(order->cpf, sizeof(char)*13, stdin);
+	printf("Digite items do pedido (tipo, id, quantidade, tamanho?) separados por ;\n");
+	fgets(order_items, SIZE_LINE, stdin);	
+	parse_item_string(order, order_items);
+	return order;
+}
+
+void process_submenu_order(enum choice_order choice){
+	switch (choice){
+	case create_enum:
+		;
+		Order *order = get_order_from_keyboard();
+		FILE *database_order = get_database(DATABASE_PD);
+		FILE *database_item_order = get_database(DATABASE_ITEM_PD);
+		print_order(order);
+		create_header_queue(database_order);
+		create_header(database_item_order);
+		write_order_to_file(database_order, database_item_order, order);
+		fclose(database_order);
+		fclose(database_item_order);
+		free(order);
+		press_enter_to_continue();
+		break;
+	case search_order:
+		printf("Digite o id do pedido.\n");
+
+		break;
+	case print_fulfilled:
+		break;
+	case fulfill_next:
+		break;	
+	default:
+		break;
+	}
 }
