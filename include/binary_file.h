@@ -76,9 +76,24 @@ void print_all_products_in_file(FILE *database_product);
 // Pós-condições: estrutura do produto retornada
 Product *read_node(FILE *database_product, int pos);
 
+// Escreve para arquivo binario uma lista de pedidos
+// Entrada: Lista encadeada com estruturas de Order
+// Retorno: Nenhum
+// Pré-condições: Lista de pedidos nao nula 
+// Pós-condições: Todos os pedidos da lista gravados em arquivo binario
 void write_order_list_to_file(LinkedList *list_order);
 
+// Escreve pedido em um arquivo binario como fila e os itens do pedido em outro arquivo binario como lista encadeada
+// Entrada: Ponteiro para arquivo de pedido, ponteiro para arquivo de itens de pedido e estrutura de pedido
+// Retorno: Nenhum
+// Pré-condições: Cabecalhos escritos nos ponteiros de arquivo
+// Pós-condições: Pedido e itens do pedido escritos em arquivos binarios
 void write_order_to_file(FILE *database_order, FILE *database_item_order, Order *order);
 
+// Busca estrutura de Order_file no arquivo binario na posicao pos
+// Entrada: Ponteiro para arquivo binario e posicao que se deseja buscar
+// Retorno: Estrutura Order_file
+// Pré-condições: Nenhuma
+// Pós-condições: Estrutura de Order_file alocada
 Order_file *seek_order(FILE *database, int pos);
 #endif

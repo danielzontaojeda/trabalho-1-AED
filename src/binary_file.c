@@ -162,6 +162,11 @@ void write_product_to_file(Product *product, FILE *database_product){
 	insert_product(product, database_product);
 }
 
+// Recebe lista encadeada com items de order e os grava em arquivo binario
+// Entrada: Ponteiro para o arquivo binario e lista contendo estruturas de Order_items
+// Retorno: Cabeca da lista gravada no arquivo binario
+// Pré-condições: Cabecalho ja criado em database_item_order
+// Pós-condições: Lista encadeada gravada no arquivo e posicao da cabeca retornada
 static int insert_items_order(FILE *database_item_order, LinkedList *list_items){
 	Header *header = read_header(database_item_order);
 	assert(header);
@@ -196,6 +201,11 @@ static int insert_items_order(FILE *database_item_order, LinkedList *list_items)
 	return head;
 }
 
+// Cria estrutura de dados para ser gravada em arquivo binario
+// Entrada: Estrutura de pedido order
+// Retorno: Estrutuura de pedido order_file
+// Pré-condições: order nao aponta para NULL
+// Pós-condições: Estrutura de Order_file alocada
 static Order_file *create_order(Order *order){
 	Order_file *order_file = calloc(1, sizeof(Order_file));
 	order_file->id = order->id;
@@ -206,6 +216,11 @@ static Order_file *create_order(Order *order){
 	return order_file;
 }
 
+// Busca estrutura de Order_file no arquivo binario na posicao pos
+// Entrada: Ponteiro para arquivo binario e posicao que se deseja buscar
+// Retorno: Estrutura Order_file
+// Pré-condições: Nenhuma
+// Pós-condições: Estrutura de Order_file alocada
 Order_file *seek_order(FILE *database, int pos){
 	Order_file *order = calloc(1, sizeof(Order_file));
 	fseek(database, sizeof(Header_queue) + pos*sizeof(Order_file), SEEK_SET);
@@ -213,6 +228,11 @@ Order_file *seek_order(FILE *database, int pos){
 	return order;
 }
 
+// Escreve pedido em um arquivo binario como fila e os itens do pedido em outro arquivo binario como lista encadeada
+// Entrada: Ponteiro para arquivo de pedido, ponteiro para arquivo de itens de pedido e estrutura de pedido
+// Retorno: Nenhum
+// Pré-condições: Cabecalhos escritos nos ponteiros de arquivo
+// Pós-condições: Pedido e itens do pedido escritos em arquivos binarios
 void write_order_to_file(FILE *database_order, FILE *database_item_order, Order *order){
 	Header_queue *header = read_header_queue(database_order);
 	assert(header);
@@ -241,6 +261,11 @@ void write_order_to_file(FILE *database_order, FILE *database_item_order, Order 
 	free(order_file);
 }
 
+// Escreve para arquivo binario uma lista de pedidos
+// Entrada: Lista encadeada com estruturas de Order
+// Retorno: Nenhum
+// Pré-condições: Lista de pedidos nao nula 
+// Pós-condições: Todos os pedidos da lista gravados em arquivo binario
 void write_order_list_to_file(LinkedList *list_order){
 	assert(list_order);
 	FILE *database_order = get_database(DATABASE_PD);
