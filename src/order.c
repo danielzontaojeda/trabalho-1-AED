@@ -199,7 +199,7 @@ static Order *convert_order(Order_file *order_file){
 Order *find_order(unsigned id){
 	FILE *database = get_database(DATABASE_PD);
 	Header_queue *header = read_header_queue(database);
-	Order_file *order_file = seek_order(database, header->pos_tail);
+	Order_file *order_file = seek_order(database, header->pos_head);
 	Order *order = convert_order(order_file);
 	int next;
 	while(order_file->next != EMPTY){
