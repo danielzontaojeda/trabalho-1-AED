@@ -228,6 +228,11 @@ Order *find_order(unsigned id){
 	return NULL;
 }
 
+// Percorre lista de nos deletados e insere pos no final da lista
+// Entrada: Ponteiro para arquivo, Ponteiro do cabecalho do arquivo e posicao
+// Retorno: Nenhum
+// Pré-condições: Nenhuma
+// Pós-condições: pos inserido no final de header->pos_free
 static void add_empty_position_to_header(FILE *database, Header_queue *header, int pos){
 	if(header->pos_free == EMPTY){
 		header->pos_free = pos;
@@ -251,6 +256,11 @@ static void add_empty_position_to_header(FILE *database, Header_queue *header, i
 }
 
 
+// Marca no na posicao pos como deletado e arruma reencadeia lista encadeada
+// Entrada: Ponteiro para arquivo de banco de dados e posicao a ser deletada
+// Retorno: Nenhum
+// Pré-condições: Nenhum
+// Pós-condições: No na posicao pos marcado como deletado
 static void delete_order_position(FILE *database, int pos){
 	Header_queue *header = read_header_queue(database);
 	int actual;
@@ -312,6 +322,11 @@ static void delete_order_position(FILE *database, int pos){
 	free(header);
 }
 
+// Remove o pedido mais antigo da fila
+// Entrada: Nenhuma
+// Retorno: Posicao do pedido removido
+// Pré-condições: Nenhuma
+// Pós-condições: Pedido mais antigo marcado como removido
 static int remove_next_order(){
 	FILE *database = get_database(DATABASE_PD);
 	Header_queue *header = read_header_queue(database);
@@ -328,6 +343,11 @@ static int remove_next_order(){
 	return pos;
 }
 
+// Imprime em stdout todos os pedidos ainda nao atendidos em ordem de chegada
+// Entrada: Nenhuma
+// Retorno: Nenhum
+// Pré-condições: Nenhum
+// Pós-condições: Todos os pedidos ainda nao atendidos impressos em stdout
 void print_order_queue(){
 	FILE *database = get_database(DATABASE_PD);
 	Header_queue *header = read_header_queue(database);
