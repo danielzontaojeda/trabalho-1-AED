@@ -224,6 +224,17 @@ Order_file *seek_order(FILE *database, int pos){
 	fread(order, sizeof(Order_file), 1, database);
 	return order;
 }
+// Busca estrutura de Order_file no arquivo binario na posicao pos
+// Entrada: Ponteiro para arquivo binario e posicao que se deseja buscar
+// Retorno: Estrutura Order_file
+// Pré-condições: Nenhuma
+// Pós-condições: Estrutura de Order_file alocada
+Order_file *seek_order_fulfilled(FILE *database, int pos){
+	Order_file *order = calloc(1, sizeof(Order_file));
+	fseek(database, sizeof(Header) + pos*sizeof(Order_file), SEEK_SET);
+	fread(order, sizeof(Order_file), 1, database);
+	return order;
+}
 
 // Escreve pedido em um arquivo binario como fila e os itens do pedido em outro arquivo binario como lista encadeada
 // Entrada: Ponteiro para arquivo de pedido, ponteiro para arquivo de itens de pedido e estrutura de pedido

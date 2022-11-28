@@ -99,4 +99,6 @@ void write_order_to_file(FILE *database_order, FILE *database_item_order, Order 
 Order_file *seek_order(FILE *database, int pos);
 
 void insert_fulfilled_order(Order_file *order);
+
+Order_file *seek_order_fulfilled(FILE *database, int pos);
 #endif

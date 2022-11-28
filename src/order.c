@@ -368,6 +368,25 @@ void print_order_queue(){
 	free(order);
 }
 
+void print_fulfilled_orders(){
+	FILE *database = get_database(DATABASE_FULFILLED_PD);
+	Header *header = read_header(database);
+	Order_file *order_file = seek_order_fulfilled(database, header->pos_head);
+	Order *order = convert_order(order_file);
+	if(order == NULL) printf("Nenhum pedido foi atendido ainda.\n");
+	while(order->next != EMPTY){
+		print_order(order);
+		int next = order_file->next;
+		free(order_file);
+		free(order);
+		order_file = seek_order_fulfilled(database, next);
+		order = convert_order(order_file);
+	}
+	print_order(order);
+	free(order_file);
+	free(order);
+}
+
 // Processa a escolha do usuario no menu de pedidos
 // Entrada: enum com escolha do usuario
 // Retorno: Nenhum
@@ -410,6 +429,10 @@ void process_submenu_order(enum choice_order choice){
 		press_enter_to_continue();
 		break;
 	case print_fulfilled:
+		clear_screen();
+		printf("Lista de pedidos atendidos:\n");
+		print_fulfilled_orders();
+		press_enter_to_continue();
 		break;
 	case fulfill_next:
 		remove_next_order();
