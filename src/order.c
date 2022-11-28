@@ -6,7 +6,7 @@
 #include "linked_list.h"
 #include "order.h"
 #include "product.h"
-// #include "debug.h"
+#include "debug.h"
 #include "screen.h"
 #include "binary_file.h"
 #include "header.h"
@@ -286,15 +286,16 @@ static void delete_order_position(FILE *database, int pos){
 		free(order);
 		add_empty_position_to_header(database, header, actual);
 	}else{
-		Order_file *order = seek_order(database, header->pos_tail);
+		Order_file *order = seek_order(database, header->pos_head);
+		actual = header->pos_head;
 		while(order->next != pos){
-			printf("order->next: %d\n",order->next);
 			actual = order->next;
 			free(order);
 			order = seek_order(database, actual);
 		}
 		int next = order->next;
 		free(order);
+		add_empty_position_to_header(database, header, next);
 		order = seek_order(database, next);
 		next = order->next;
 		free(order);
@@ -302,8 +303,6 @@ static void delete_order_position(FILE *database, int pos){
 			// caso item nao seja ultimo da lista
 			order = seek_order(database, actual);
 			order->next = next;
-			Order *o = convert_order(order);
-			print_order(o);
 			fseek(database, sizeof(Header_queue) + actual*sizeof(Order_file), SEEK_SET);
 			fwrite(order, sizeof(Order_file), 1, database);
 			free(order);
@@ -313,6 +312,9 @@ static void delete_order_position(FILE *database, int pos){
 			order->next = EMPTY;
 			fseek(database, sizeof(Header_queue) + actual*sizeof(Order_file), SEEK_SET);
 			fwrite(order, sizeof(Order_file), 1, database);
+			header->pos_tail = actual;
+			fseek(database, 0, SEEK_SET);
+			fwrite(header, sizeof(Header_queue), 0, database);
 			free(order);
 		}
 		order = seek_order(database, actual);
@@ -320,7 +322,7 @@ static void delete_order_position(FILE *database, int pos){
 		free(order);
 		order = seek_order(database, next);
 		order->next = EMPTY;
-		add_empty_position_to_header(database, header, next);
+		// add_empty_position_to_header(database, header, next);
 	}
 	free(header);
 }
@@ -355,9 +357,12 @@ static int remove_next_order(){
 void print_order_queue(){
 	FILE *database = get_database(DATABASE_PD);
 	Header_queue *header = read_header_queue(database);
+	if(header->pos_head == EMPTY){
+		printf("Nao ha pedidos na fila.\n");
+		return;
+	}
 	Order_file *order_file = seek_order(database, header->pos_head);
 	Order *order = convert_order(order_file);
-	if(order == NULL) printf("Nao ha pedidos na fila.\n");
 	while(order->next != EMPTY){
 		print_order(order);
 		int next = order_file->next;
@@ -392,12 +397,14 @@ void print_fulfilled_orders(){
 
 static void drop_order(char *cpf){
 	FILE *database = get_database(DATABASE_PD);
+	int is_found = 0;
 	Header_queue *header = read_header_queue(database);
 	int pos = header->pos_head;
 	Order_file *order = seek_order(database, pos);
 	while(pos != EMPTY){
 		if(!strcmp(order->cpf, cpf)){
 			delete_order_position(database, pos);
+			is_found = 1;
 			printf("Pedido deletado:\n");
 			Order *o = convert_order(order);
 			print_order(o);
@@ -408,7 +415,8 @@ static void drop_order(char *cpf){
 		order = NULL;
 		if(pos != EMPTY) order = seek_order(database, pos);
 	}
-	printf("Pedido do cliente de cpf %s nao encontrado.\n",cpf);
+	if(!is_found)
+		printf("Pedido do cliente de cpf %s nao encontrado.\n",cpf);
 	if(order)
 		free(order);
 	free(header);
@@ -476,6 +484,7 @@ void process_submenu_order(enum choice_order choice){
 		print_order_queue();
 		printf("Digite o cpf cliente desistindo do pedido.\n");
 		scanf("%[^\n]%*c",cpf);
+		clear_screen();
 		drop_order(cpf);
 		press_enter_to_continue();
 		break;

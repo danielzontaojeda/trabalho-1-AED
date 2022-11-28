@@ -253,8 +253,10 @@ void write_order_to_file(FILE *database_order, FILE *database_item_order, Order 
 	if(header->pos_free == EMPTY){
 		fseek(database_order, sizeof(Header_queue) + header->pos_top*sizeof(Order_file), SEEK_SET);
 		fwrite(order_file, sizeof(Order_file), 1, database_order);
-		printf("DEBUG: write_order_file -> id: %u pos: %d next: %d tail: %d head: %d\n",
-			order_file->id, header->pos_top, order_file->next, header->pos_tail, header->pos_head);
+		#ifdef __DEBUG
+			printf("DEBUG: write_order_file -> id: %u pos: %d next: %d tail: %d head: %d\n",
+				order_file->id, header->pos_top, order_file->next, header->pos_tail, header->pos_head);
+		#endif
 		Order_file *tail = seek_order(database_order, header->pos_tail);
 		tail->next = header->pos_top;
 		fseek(database_order, sizeof(Header_queue) + header->pos_tail*sizeof(Order_file), SEEK_SET);
