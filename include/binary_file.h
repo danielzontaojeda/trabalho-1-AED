@@ -11,12 +11,13 @@
 #define DATABASE_FOLDER "./database"
 
 // nome do arquivo guardando os dados dos produtos cadastrados
-#define DATABASE_SD			"sandwich"
-#define DATABASE_BB			"drink"
-#define DATABASE_EX			"extra"
-#define DATABASE_SM			"dessert"
-#define DATABASE_PD 		"order"
-#define DATABASE_ITEM_PD 	"item_pd"
+#define DATABASE_SD				"sandwich"
+#define DATABASE_BB				"drink"
+#define DATABASE_EX				"extra"
+#define DATABASE_SM				"dessert"
+#define DATABASE_PD 			"order"
+#define DATABASE_ITEM_PD 		"item_pd"
+#define DATABASE_FULFILLED_PD	"fullfiled_pd"
 
 // Cabecalho para a funcao do sistema para criar uma pasta
 // Entrada: caminho da pasta para ser criada
@@ -96,4 +97,6 @@ void write_order_to_file(FILE *database_order, FILE *database_item_order, Order 
 // Pré-condições: Nenhuma
 // Pós-condições: Estrutura de Order_file alocada
 Order_file *seek_order(FILE *database, int pos);
+
+void insert_fulfilled_order(Order_file *order);
 #endif

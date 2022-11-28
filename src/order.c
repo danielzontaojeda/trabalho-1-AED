@@ -335,6 +335,7 @@ static int remove_next_order(){
 	Order_file *order_file = seek_order(database, pos);
 	Order *order = convert_order(order_file);
 	delete_order_position(database, pos);
+	insert_fulfilled_order(order_file);
 	printf("Pedido atendido: \n");
 	print_order(order);
 	free(order);
