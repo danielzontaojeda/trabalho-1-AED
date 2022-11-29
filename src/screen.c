@@ -72,7 +72,7 @@ void clear_screen(){
 }
 
 char *get_filename(){
-	char *filename = malloc(sizeof(100));
+	char *filename = malloc(100);
 	printf("Digite o nome do arquivo.\n");
 	scanf("%[^\n]%*c",filename);
 	return filename;
