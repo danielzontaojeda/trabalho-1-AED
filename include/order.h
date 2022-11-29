@@ -54,12 +54,32 @@ LinkedList *create_order_from_file(LinkedList *commands);
 // Pós-condições: Informacoes de pedido impressas em stdout
 void print_order(Order *order);
 
-void print_all_orders();
+// Deleta todos os pedidos do cliente da fila de pedidos
+// Entrada: cpf do cliente
+// Retorno: Nenhum
+// Pré-condições: Nenhum
+// Pós-condições: Todos os pedidos do cliente marcados como deletados
+static void drop_order(char *cpf);
 
-int remove_order(char *cpf);
+// Imprime em stdout todos os pedidos ainda nao atendidos em ordem de chegada
+// Entrada: Nenhuma
+// Retorno: Nenhum
+// Pré-condições: Nenhum
+// Pós-condições: Todos os pedidos ainda nao atendidos impressos em stdout
+void print_order_queue();
 
+// Converte uma estrutura Order_file para Order
+// Entrada: Estrutura de Order_file
+// Retorno: Estrutura Order
+// Pré-condições: Nenhuma
+// Pós-condições: Estrutura Order alocada dinamicamente
 Order *convert_order(Order_file *order_file);
 
+// Cria lista encadeada de itens de um pedido
+// Entrada: Ponteiro para arquivo de itens de pedido e posicao da cabeca da lista de itens
+// Retorno: Lista encadeada com estruturas de Order_items
+// Pré-condições: deve existir item do pedido na posicao head
+// Pós-condições: Lista encadeada e estruturas de Order_item alocadas dinamicamente
 LinkedList *get_item_list_from_file(FILE *database, int head);
 
 // Escreve em stdout as informacoes de um item de pedido

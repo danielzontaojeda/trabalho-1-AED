@@ -136,6 +136,12 @@ LinkedList *create_order_from_file(LinkedList *commands){
 	return list_order;
 }
 
+// Imprime na tela os 3 ultimos pedidos do cliente e retorna um ponteiro
+// com a posicao dos pedidos
+// Entrada: cpf do cliente
+// Retorno: ponteiro com posicao dos 3 ultimos pedidos do cliente
+// Pré-condições: nenhuma
+// Pós-condições: nenhuma
 static int *print_last_three_orders(char *cpf){
 	FILE *database = get_database(DATABASE_PD);
 	int *pos_orders = malloc(sizeof(int)*3);
@@ -424,6 +430,11 @@ void print_order_queue(){
 	free(order);
 }
 
+// Imprime na tela todas os pedidos ja completados
+// Entrada: nenhuma
+// Retorno: nenhum
+// Pré-condições: nenhum
+// Pós-condições: nenhum
 void print_fulfilled_orders(){
 	FILE *database = get_database(DATABASE_FULFILLED_PD);
 	Header *header = read_header(database);
@@ -443,6 +454,11 @@ void print_fulfilled_orders(){
 	free(order);
 }
 
+// Deleta todos os pedidos do cliente da fila de pedidos
+// Entrada: cpf do cliente
+// Retorno: Nenhum
+// Pré-condições: Nenhum
+// Pós-condições: Todos os pedidos do cliente marcados como deletados
 static void drop_order(char *cpf){
 	FILE *database = get_database(DATABASE_PD);
 	int is_found = 0;
