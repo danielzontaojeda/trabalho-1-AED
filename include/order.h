@@ -59,7 +59,7 @@ void print_order(Order *order);
 // Retorno: Nenhum
 // Pré-condições: Nenhum
 // Pós-condições: Todos os pedidos do cliente marcados como deletados
-static void drop_order(char *cpf);
+void drop_order(char *cpf);
 
 // Imprime em stdout todos os pedidos ainda nao atendidos em ordem de chegada
 // Entrada: Nenhuma

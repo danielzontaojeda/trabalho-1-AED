@@ -129,21 +129,16 @@ void write_product_list_to_file(LinkedList *list_products){
 static void insert_product(Product *product, FILE *database_product){
 	Header *header = read_header(database_product);
 	assert(header);
-	if(header->pos_free == EMPTY){
-		product->next = header->pos_head;
-		fseek(database_product, sizeof(Header) + header->pos_top * sizeof(Product), SEEK_SET);
-		fwrite(product, sizeof(Product), 1, database_product);
-		#ifdef __DEBUG
-			printf("DEBUG: %s inserted in position %d\n",product->name,header->pos_top);
-		#endif
-		header->pos_head = header->pos_top;
-		header->pos_top += 1;
-		fseek(database_product, 0, SEEK_SET);
-		assert(fwrite(header, sizeof(Header), 1, database_product));
-	}else{
-		//TODO: implement
-		exit(1);
-	}
+	product->next = header->pos_head;
+	fseek(database_product, sizeof(Header) + header->pos_top * sizeof(Product), SEEK_SET);
+	fwrite(product, sizeof(Product), 1, database_product);
+	#ifdef __DEBUG
+		printf("DEBUG: %s inserted in position %d\n",product->name,header->pos_top);
+	#endif
+	header->pos_head = header->pos_top;
+	header->pos_top += 1;
+	fseek(database_product, 0, SEEK_SET);
+	assert(fwrite(header, sizeof(Header), 1, database_product));
 	free(header);
 }
 
@@ -190,7 +185,7 @@ static int insert_items_order(FILE *database_item_order, LinkedList *list_items)
 				item->next = header->pos_head;
 			}
 		}else{
-			// TODO
+			printf("here: %d\n",header->pos_free);
 		}
 	}
 	int head = header->pos_head;
@@ -247,10 +242,7 @@ void write_order_to_file(FILE *database_order, FILE *database_item_order, Order 
 	assert(header);
 	Order_file *order_file = create_order(order);
 	order_file->head_item = insert_items_order(database_item_order, order->list_products);
-	if(header->pos_top == 0)
-		order_file->next = EMPTY;
-	else 
-		order_file->next = EMPTY;
+	order_file->next = EMPTY;
 	if(header->pos_free == EMPTY){
 		fseek(database_order, sizeof(Header_queue) + header->pos_top*sizeof(Order_file), SEEK_SET);
 		fwrite(order_file, sizeof(Order_file), 1, database_order);
@@ -266,6 +258,25 @@ void write_order_to_file(FILE *database_order, FILE *database_item_order, Order 
 		if(header->pos_head == EMPTY) header->pos_head = header->pos_top;
 		header->pos_tail = header->pos_top;
 		header->pos_top += 1;
+		fseek(database_order, 0, SEEK_SET);
+		fwrite(header, sizeof(Header_queue), 1, database_order);
+	}else{
+		// get next free position
+		Order_file *order_in_deleted_position = seek_order(database_order, header->pos_free);
+		int next_pos_free = order_in_deleted_position->next;
+		free(order_in_deleted_position);
+		// insert order into free position
+		fseek(database_order, sizeof(Header_queue) + header->pos_free*sizeof(Order_file), SEEK_SET);
+		fwrite(order_file, sizeof(Order_file), 1, database_order);
+		// tail->next is inserted order
+		Order_file *tail = seek_order(database_order, header->pos_tail);
+		tail->next = header->pos_free;
+		fseek(database_order, sizeof(Header_queue) + header->pos_tail*sizeof(Order_file), SEEK_SET);
+		fwrite(tail, sizeof(Order_file), 1, database_order);
+		free(tail);
+		// update header
+		header->pos_tail = header->pos_free;
+		header->pos_free = next_pos_free;
 		fseek(database_order, 0, SEEK_SET);
 		fwrite(header, sizeof(Header_queue), 1, database_order);
 	}

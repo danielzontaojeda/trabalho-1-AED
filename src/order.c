@@ -460,7 +460,7 @@ void print_fulfilled_orders(){
 // Retorno: Nenhum
 // Pré-condições: Nenhum
 // Pós-condições: Todos os pedidos do cliente marcados como deletados
-static void drop_order(char *cpf){
+void drop_order(char *cpf){
 	FILE *database = get_database(DATABASE_PD);
 	int is_found = 0;
 	Header_queue *header = read_header_queue(database);
