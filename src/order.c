@@ -225,6 +225,7 @@ static Order *get_order_from_keyboard(){
 	printf("Digite items do pedido (tipo, id, quantidade, tamanho?) separados por ;\n");
 	fgets(order_items, SIZE_LINE, stdin);	
 	parse_item_string(order, order_items);
+	free(pos_orders);
 	return order;
 }
 
