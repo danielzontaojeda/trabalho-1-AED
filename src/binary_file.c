@@ -224,6 +224,7 @@ Order_file *seek_order(FILE *database, int pos){
 	fread(order, sizeof(Order_file), 1, database);
 	return order;
 }
+
 // Busca estrutura de Order_file no arquivo binario na posicao pos
 // Entrada: Ponteiro para arquivo binario e posicao que se deseja buscar
 // Retorno: Estrutura Order_file
@@ -292,6 +293,11 @@ void write_order_list_to_file(LinkedList *list_order){
 	fclose(database_item_order);
 }
 
+// Insere pedido em arquivo com pedidos atendidos
+// Entrada: Estrutura de pedido
+// Retorno: Nenhum
+// Pré-condições: Nenhum
+// Pós-condições: Pedido gravado no arquivo de pedidos atendidos
 void insert_fulfilled_order(Order_file *order){
 	FILE *database = get_database(DATABASE_FULFILLED_PD);
 	create_header(database);

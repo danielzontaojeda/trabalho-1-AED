@@ -98,7 +98,17 @@ void write_order_to_file(FILE *database_order, FILE *database_item_order, Order 
 // Pós-condições: Estrutura de Order_file alocada
 Order_file *seek_order(FILE *database, int pos);
 
+// Insere pedido em arquivo com pedidos atendidos
+// Entrada: Estrutura de pedido
+// Retorno: Nenhum
+// Pré-condições: Nenhum
+// Pós-condições: Pedido gravado no arquivo de pedidos atendidos
 void insert_fulfilled_order(Order_file *order);
 
+// Busca estrutura de Order_file no arquivo binario na posicao pos
+// Entrada: Ponteiro para arquivo binario e posicao que se deseja buscar
+// Retorno: Estrutura Order_file
+// Pré-condições: Nenhuma
+// Pós-condições: Estrutura de Order_file alocada
 Order_file *seek_order_fulfilled(FILE *database, int pos);
 #endif
