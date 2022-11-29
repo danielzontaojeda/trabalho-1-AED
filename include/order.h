@@ -47,8 +47,6 @@ typedef struct order{
 // Pós-condições: Lista encadeada alocada dinamicamente, e cada lista tem uma estrutura Order tambem alocada dinamicamente
 LinkedList *create_order_from_file(LinkedList *commands);
 
-Order *get_latest_3_orders(char *cpf);
-
 // Imprime em stdout as informacoes de um pedido, incluindo seus itens
 // Entrada: Estrutura de pedido
 // Retorno: Nenhum
@@ -59,6 +57,10 @@ void print_order(Order *order);
 void print_all_orders();
 
 int remove_order(char *cpf);
+
+Order *convert_order(Order_file *order_file);
+
+LinkedList *get_item_list_from_file(FILE *database, int head);
 
 // Escreve em stdout as informacoes de um item de pedido
 // Entrada: Estrutura de item de pedido

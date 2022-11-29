@@ -136,42 +136,33 @@ LinkedList *create_order_from_file(LinkedList *commands){
 	return list_order;
 }
 
-// Executa fluxo de programa para pegar as informacoes de um pedido por stdin
-// Entrada: Nenhuma
-// Retorno: Estrutura de pedido
-// Pré-condições: cpf digitado deve ter 11 digitos, item do pedido digitado deve ter formato correto
-// Pós-condições: Estrutura de pedido alocada dinamicamente e retornada
-static Order *get_order_from_keyboard(){
-	clear_screen();
-	Order *order = calloc(1, sizeof(Order));
-	char order_items[SIZE_LINE];
-	strcpy(order->type, "PD");
-	printf("Digite o id do pedido.\n");
-	scanf("%u%*c",&order->id);
-	printf("Digite o cpf do cliente. (11 digitos sem pontuacao)\n");
-	fgets(order->cpf, sizeof(char)*13, stdin);
-	printf("Digite items do pedido (tipo, id, quantidade, tamanho?) separados por ;\n");
-	fgets(order_items, SIZE_LINE, stdin);	
-	parse_item_string(order, order_items);
-	return order;
-}
-
-// Cria lista encadeada de itens de um pedido
-// Entrada: Ponteiro para arquivo de itens de pedido e posicao da cabeca da lista de itens
-// Retorno: Lista encadeada com estruturas de Order_items
-// Pré-condições: deve existir item do pedido na posicao head
-// Pós-condições: Lista encadeada e estruturas de Order_item alocadas dinamicamente
-static LinkedList *get_item_list_from_file(FILE *database, int head){
-	int item_pos = head;
-	LinkedList *list_items = NULL;
-	while(item_pos != EMPTY){
-		Order_items *item = calloc(1, sizeof(Order_items));
-		fseek(database, sizeof(Header) + item_pos*sizeof(Order_items), SEEK_SET);
-		fread(item, sizeof(Order_items), 1, database);
-		list_items = ll_insert(list_items, item);
-		item_pos = item->next;
+static int *print_last_three_orders(char *cpf){
+	FILE *database = get_database(DATABASE_PD);
+	int *pos_orders = malloc(sizeof(int)*3);
+	for(int i=0;i<3;i++) pos_orders[i] = -1;
+	Header_queue *header = read_header_queue(database);
+	int pos = header->pos_head;
+	int order_found = 0;
+	Order_file *order = seek_order(database, pos);
+	while(pos != EMPTY && order_found < 3){
+		if(!strcmp(cpf, order->cpf)){
+			pos_orders[order_found] = pos;
+			printf("%d:\n",order_found+1);
+			order_found += 1;
+			Order *tmp = convert_order(order);
+			print_order(tmp);
+			free(tmp);
+		}
+		pos = order->next;
+		free(order);
+		order = NULL;
+		if(pos != EMPTY) order = seek_order(database, pos);
 	}
-	return list_items;
+	if(order)
+		free(order);
+	free(header);
+	fclose(database);
+	return pos_orders;
 }
 
 // Converte uma estrutura Order_file para Order
@@ -179,7 +170,7 @@ static LinkedList *get_item_list_from_file(FILE *database, int head){
 // Retorno: Estrutura Order
 // Pré-condições: Nenhuma
 // Pós-condições: Estrutura Order alocada dinamicamente
-static Order *convert_order(Order_file *order_file){
+Order *convert_order(Order_file *order_file){
 	if(order_file == NULL) return NULL;
 	FILE *database_items = get_database(DATABASE_ITEM_PD);
 	Order *order = calloc(1, sizeof(Order));
@@ -192,6 +183,63 @@ static Order *convert_order(Order_file *order_file){
 	fclose(database_items);
 	return order;
 }
+
+// Executa fluxo de programa para pegar as informacoes de um pedido por stdin
+// Entrada: Nenhuma
+// Retorno: Estrutura de pedido
+// Pré-condições: cpf digitado deve ter 11 digitos, item do pedido digitado deve ter formato correto
+// Pós-condições: Estrutura de pedido alocada dinamicamente e retornada
+static Order *get_order_from_keyboard(){
+	clear_screen();
+	char cpf[13];
+	int *pos_orders;
+	char order_items[SIZE_LINE];
+	printf("Digite o cpf do cliente. (11 digitos sem pontuacao)\n");
+	scanf("%[^\n]%*c",cpf);
+	pos_orders = print_last_three_orders(cpf);
+	if(pos_orders[0] != -1){
+		printf("Deseja repetir um pedido? Digite o numero do pedido ou 0 para realizar um novo pedido.\n");
+		int option;
+		scanf("%d%*c",&option);	
+		if(option != 0){
+			FILE *database = get_database(DATABASE_PD);
+			Order_file *order_file = seek_order(database, pos_orders[option-1]);
+			Order *order = convert_order(order_file);
+			free(order_file);
+			free(pos_orders);
+			fclose(database);
+			return order;
+		}
+	}
+	Order *order = calloc(1, sizeof(Order));
+	strcpy(order->type, "PD");
+	strcpy(order->cpf, cpf);
+	printf("Digite o id do pedido.\n");
+	scanf("%u%*c",&order->id);
+	printf("Digite items do pedido (tipo, id, quantidade, tamanho?) separados por ;\n");
+	fgets(order_items, SIZE_LINE, stdin);	
+	parse_item_string(order, order_items);
+	return order;
+}
+
+// Cria lista encadeada de itens de um pedido
+// Entrada: Ponteiro para arquivo de itens de pedido e posicao da cabeca da lista de itens
+// Retorno: Lista encadeada com estruturas de Order_items
+// Pré-condições: deve existir item do pedido na posicao head
+// Pós-condições: Lista encadeada e estruturas de Order_item alocadas dinamicamente
+LinkedList *get_item_list_from_file(FILE *database, int head){
+	int item_pos = head;
+	LinkedList *list_items = NULL;
+	while(item_pos != EMPTY){
+		Order_items *item = calloc(1, sizeof(Order_items));
+		fseek(database, sizeof(Header) + item_pos*sizeof(Order_items), SEEK_SET);
+		fread(item, sizeof(Order_items), 1, database);
+		list_items = ll_insert(list_items, item);
+		item_pos = item->next;
+	}
+	return list_items;
+}
+
 
 // Retorna estrutura de Order com id passado por parametro. Retorna NULL caso nao encontre
 // Entrada: id do pedido
@@ -434,6 +482,8 @@ void process_submenu_order(enum choice_order choice){
 	case create_enum:
 		;
 		order = get_order_from_keyboard();
+		printf("pedido criada: \n");
+		print_order(order);
 		FILE *database_order = get_database(DATABASE_PD);
 		FILE *database_item_order = get_database(DATABASE_ITEM_PD);
 		create_header_queue(database_order);
