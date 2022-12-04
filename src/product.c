@@ -69,7 +69,7 @@ static unsigned get_availability(){
 // Pós-condições: vetor de doubles com preco retornado
 static double *get_price_from_str(const char *type, char *price_str){
 	assert(is_type_of_product(type));
-	char price_split[2][10];
+	char price_split[3][10];
 	double *price = calloc(3,sizeof(double));
 	if(!strcmp(type, "SD") || !strcmp(type, "BB")){
 		sscanf(price_str, "%[^;];%[^;];%[^\n]%*c", price_split[0], price_split[1], price_split[2]);
