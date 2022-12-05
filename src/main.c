@@ -75,7 +75,7 @@ int process_choice(enum choices choice){
 
 int main(){
 	int option;
-
+	create_databases();
 	print_menu();
 	scanf("%d%*c", &option);
 	while(option != 0){

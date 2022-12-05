@@ -111,4 +111,6 @@ void insert_fulfilled_order(Order_file *order);
 // Pré-condições: Nenhuma
 // Pós-condições: Estrutura de Order_file alocada
 Order_file *seek_order_fulfilled(FILE *database, int pos);
+
+void create_databases();
 #endif

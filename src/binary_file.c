@@ -327,3 +327,27 @@ void insert_fulfilled_order(Order_file *order){
 	free(header);
 	fclose(database);
 }
+
+void create_databases(){
+	FILE *database_bb = get_database(DATABASE_BB);
+	FILE *database_sd = get_database(DATABASE_SD);
+	FILE *database_ex = get_database(DATABASE_EX);
+	FILE *database_sm = get_database(DATABASE_SM);
+	FILE *database_pd = get_database(DATABASE_PD);
+	FILE *database_ip = get_database(DATABASE_ITEM_PD);
+	FILE *database_fp = get_database(DATABASE_FULFILLED_PD);
+	create_header(database_bb);
+	create_header(database_sd);
+	create_header(database_ex);
+	create_header(database_sm);
+	create_header(database_ip);
+	create_header(database_fp);
+	create_header_queue(database_pd);
+	fclose(database_bb);
+	fclose(database_sd);
+	fclose(database_ex);
+	fclose(database_sm);
+	fclose(database_pd);
+	fclose(database_ip);
+	fclose(database_fp);
+}
