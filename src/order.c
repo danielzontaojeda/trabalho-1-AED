@@ -255,6 +255,7 @@ LinkedList *get_item_list_from_file(FILE *database, int head){
 Order *find_order(unsigned id){
 	FILE *database = get_database(DATABASE_PD);
 	Header_queue *header = read_header_queue(database);
+	if(header->pos_head == EMPTY) return NULL;
 	Order_file *order_file = seek_order(database, header->pos_head);
 	Order *order = convert_order(order_file);
 	int next;
@@ -438,9 +439,12 @@ void print_order_queue(){
 void print_fulfilled_orders(){
 	FILE *database = get_database(DATABASE_FULFILLED_PD);
 	Header *header = read_header(database);
+	if(header->pos_head == -1){
+		printf("Nenhum pedido atendido ainda!\n");
+		return;
+	}
 	Order_file *order_file = seek_order_fulfilled(database, header->pos_head);
 	Order *order = convert_order(order_file);
-	if(order == NULL) printf("Nenhum pedido foi atendido ainda.\n");
 	while(order->next != EMPTY){
 		print_order(order);
 		int next = order_file->next;
