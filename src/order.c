@@ -502,7 +502,7 @@ void process_submenu_order(enum choice_order choice){
 	case create_enum:
 		;
 		order = get_order_from_keyboard();
-		printf("pedido criada: \n");
+		printf("pedido criado: \n");
 		print_order(order);
 		FILE *database_order = get_database(DATABASE_PD);
 		FILE *database_item_order = get_database(DATABASE_ITEM_PD);
