@@ -2,3 +2,4 @@ database/
 obj/
 bin/
 .vscode/
+*.tex

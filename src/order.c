@@ -128,7 +128,6 @@ LinkedList *create_order_from_file(LinkedList *commands){
 			order->id = id;
 			strcpy(order->type, type);
 			strcpy(order->cpf, cpf);
-			// print_order(order);
 			list_order = ll_insert(list_order, order);
 		}
 		command = command->prox;
