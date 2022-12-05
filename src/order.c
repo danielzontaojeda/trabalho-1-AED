@@ -430,6 +430,8 @@ void print_order_queue(){
 	print_order(order);
 	free(order_file);
 	free(order);
+	free(header);
+	fclose(database);
 }
 
 // Imprime na tela todas os pedidos ja completados
@@ -457,6 +459,8 @@ void print_fulfilled_orders(){
 	print_order(order);
 	free(order_file);
 	free(order);
+	free(header);
+	fclose(database);
 }
 
 // Deleta todos os pedidos do cliente da fila de pedidos
