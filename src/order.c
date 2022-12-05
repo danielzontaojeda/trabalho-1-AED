@@ -390,6 +390,7 @@ static void delete_order_position(FILE *database, int pos){
 static int remove_next_order(){
 	FILE *database = get_database(DATABASE_PD);
 	Header_queue *header = read_header_queue(database);
+	if(header->pos_head == EMPTY) return EMPTY;
 	int pos = header->pos_head;
 	free(header);
 	Order_file *order_file = seek_order(database, pos);
@@ -541,7 +542,8 @@ void process_submenu_order(enum choice_order choice){
 		press_enter_to_continue();
 		break;
 	case fulfill_next:
-		remove_next_order();
+		clear_screen();
+		if(remove_next_order() == EMPTY) printf("Nao ha pedido na fila de pedidos.\n");
 		press_enter_to_continue();
 		break;
 	case print_queue:
