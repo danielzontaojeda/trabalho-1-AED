@@ -60,8 +60,10 @@ int process_choice(enum choices choice){
 		commands =  load_from_file(filename);
 		list_product = create_product_from_file(commands);
 		list_order = create_order_from_file(commands);
-		write_product_list_to_file(list_product);
-		write_order_list_to_file(list_order);
+		if(list_product != NULL)
+			write_product_list_to_file(list_product);
+		if(list_order != NULL)
+			write_order_list_to_file(list_order);
 		free(filename);
 		ll_delete(commands);
 		ll_delete(list_product);

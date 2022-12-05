@@ -113,7 +113,7 @@ void print_order(Order *order){
 // Pré-condições: commands deve ter formato valido
 // Pós-condições: Lista encadeada alocada dinamicamente, e cada lista tem uma estrutura Order tambem alocada dinamicamente
 LinkedList *create_order_from_file(LinkedList *commands){
-	assert(commands);
+	if(commands == NULL) return NULL;
 	char type[3], cpf[12], item_order[SIZE_LINE];
 	unsigned id;
 	LinkedList *command = commands;
@@ -465,7 +465,7 @@ void drop_order(char *cpf){
 	Header_queue *header = read_header_queue(database);
 	int pos = header->pos_head;
 	Order_file *order = seek_order(database, pos);
-	while(pos != EMPTY){
+	while(pos != EMPTY && is_found == 0){
 		if(!strcmp(order->cpf, cpf)){
 			delete_order_position(database, pos);
 			is_found = 1;
