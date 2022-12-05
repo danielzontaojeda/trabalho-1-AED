@@ -78,6 +78,11 @@ int is_type_of_product(const char *type);
 // Pós-condições: nome inteiro do tipo do produto retornado
 char *get_product_type_name(const char *type);
 
+// Busca produto por id
+// Entrada: Tipo de produto que se deseja procurar e seu id
+// Retorno: Estrutura de produto
+// Pré-condições: Banco de dados do produto existe e tem cabecalho inicializado
+// Pós-condições: Ponteiro aponta para estrutura de produto alocado dinamicamente
 Product *find_product(char *type, int id);
 
 #endif
