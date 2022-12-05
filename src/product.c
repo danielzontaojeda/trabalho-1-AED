@@ -219,7 +219,7 @@ static void parse_product_from_string(char *string, char *type, int *id, char *n
 // Pré-condições: lista de comandos nao nula com formato valido
 // Pós-condições: lista encadeada contendo produtos retornada
 LinkedList *create_product_from_file(LinkedList *ll){
-	assert(ll);
+	if(ll == NULL) return NULL;
 	LinkedList *list_commands = ll;
 	LinkedList *list_products = NULL;
 	while(list_commands != NULL){
