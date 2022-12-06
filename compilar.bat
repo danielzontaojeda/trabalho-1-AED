@@ -1,3 +1,6 @@
+mkdir obj
+mkdir bin
+mkdir database
 gcc -Iinclude -MMD -MP -W -Wall -pedantic -c src/util.c -o obj/util.o
 gcc -Iinclude -MMD -MP -W -Wall -pedantic -c src/main.c -o obj/main.o
 gcc -Iinclude -MMD -MP -W -Wall -pedantic -c src/header.c -o obj/header.o

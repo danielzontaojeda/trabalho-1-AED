@@ -207,8 +207,8 @@ static Order *get_order_from_keyboard(){
 		int option;
 		scanf("%d%*c",&option);	
 		if(option != 0){
-			FILE *database = get_database(DATABASE_PD);
-			Order_file *order_file = seek_order(database, pos_orders[option-1]);
+			FILE *database = get_database(DATABASE_FULFILLED_PD);
+			Order_file *order_file = seek_order_fulfilled(database, pos_orders[option-1]);
 			Order *order = convert_order(order_file);
 			free(order_file);
 			free(pos_orders);
@@ -377,7 +377,6 @@ static void delete_order_position(FILE *database, int pos){
 		free(order);
 		order = seek_order(database, next);
 		order->next = EMPTY;
-		// add_empty_position_to_header(database, header, next);
 	}
 	free(header);
 }
