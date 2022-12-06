@@ -275,7 +275,8 @@ void write_order_to_file(FILE *database_order, FILE *database_item_order, Order 
 		fwrite(tail, sizeof(Order_file), 1, database_order);
 		free(tail);
 		// update header
-		header->pos_head = header->pos_free;
+		if(header->pos_head == EMPTY)
+			header->pos_head = header->pos_free;
 		header->pos_tail = header->pos_free;
 		header->pos_free = next_pos_free;
 		fseek(database_order, 0, SEEK_SET);
