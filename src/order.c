@@ -142,13 +142,13 @@ LinkedList *create_order_from_file(LinkedList *commands){
 // Pré-condições: nenhuma
 // Pós-condições: nenhuma
 static int *print_last_three_orders(char *cpf){
-	FILE *database = get_database(DATABASE_PD);
+	FILE *database = get_database(DATABASE_FULFILLED_PD);
 	int *pos_orders = malloc(sizeof(int)*3);
 	for(int i=0;i<3;i++) pos_orders[i] = -1;
-	Header_queue *header = read_header_queue(database);
+	Header *header = read_header(database);
 	int pos = header->pos_head;
 	int order_found = 0;
-	Order_file *order = seek_order(database, pos);
+	Order_file *order = seek_order_fulfilled(database, pos);
 	while(pos != EMPTY && order_found < 3){
 		if(!strcmp(cpf, order->cpf)){
 			pos_orders[order_found] = pos;
@@ -161,7 +161,7 @@ static int *print_last_three_orders(char *cpf){
 		pos = order->next;
 		free(order);
 		order = NULL;
-		if(pos != EMPTY) order = seek_order(database, pos);
+		if(pos != EMPTY) order = seek_order_fulfilled(database, pos);
 	}
 	if(order)
 		free(order);
