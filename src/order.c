@@ -330,7 +330,7 @@ static void delete_order_position(FILE *database, int pos){
 		fwrite(header, sizeof(Header_queue), 1, database);
 		order->next = EMPTY;
 		// proximo do pedido deletado para -1
-		fseek(database, sizeof(Header) + actual*sizeof(Order_file), SEEK_SET);
+		fseek(database, sizeof(Header_queue) + actual*sizeof(Order_file), SEEK_SET);
 		fwrite(order, sizeof(Order_file), 1, database);
 		free(order);
 		order = seek_order(database, header->pos_head);
